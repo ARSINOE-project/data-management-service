@@ -1,5 +1,8 @@
 package gr.athenarc.datamanagementservice.controller;
 
+import gr.athenarc.datamanagementservice.dto.CaseStudy;
+import gr.athenarc.datamanagementservice.dto.ckan.CaseStudyListCkan;
+import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +16,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,16 +29,12 @@ public class HandleRequestController {
     @Value("${app.ckan-base-uri}")
     private String baseUri;
 
-    @GetMapping("/list-case-studies")
-    public ResponseEntity<Map<Object, Object>> listCaseStudies(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", authorizationHeader);
+    @Autowired
+    private RequestService requestService;
 
-        HttpEntity<Void> entity = new HttpEntity<>(headers);
-        ResponseEntity<Map<Object, Object>> response = restTemplate.exchange(baseUri + "/organization_list", HttpMethod.GET, entity, new ParameterizedTypeReference<Map<Object, Object>>(){});
-        log.info("Response for organization list: " + response.getBody());
-        return new ResponseEntity<>(response.getBody(), HttpStatus.OK);
+    @GetMapping("/list-case-studies")
+    public ResponseEntity<List<CaseStudy>> listCaseStudies(HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.listCaseStudies(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
 
     @GetMapping("/list-datasets")
