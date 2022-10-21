@@ -29,7 +29,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(GroupNotFoundException.class)
     public ResponseEntity<Void> handleGroupNotFoundException(GroupNotFoundException e, WebRequest request) {
-        log.info("GroupNotFoundException occurred, dataset id = {}", e.getGroupId());
+        log.info("GroupNotFoundException occurred, group id = {}", e.getGroupId());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
