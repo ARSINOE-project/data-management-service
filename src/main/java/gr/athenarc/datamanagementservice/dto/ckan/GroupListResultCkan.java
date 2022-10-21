@@ -5,9 +5,11 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CaseStudyListCkan {
+public class GroupListResultCkan {
 
     private String help;
-    private boolean success;
-    private List<CaseStudyCkan> result;
+
+    private Boolean success;
+
+    private List<GroupCkan> result;
 }
