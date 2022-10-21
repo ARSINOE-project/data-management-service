@@ -7,12 +7,12 @@ import gr.athenarc.datamanagementservice.dto.Resource;
 import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -21,12 +21,6 @@ import java.util.List;
 @RestController
 @Slf4j
 public class HandleRequestController {
-
-    @Autowired
-    RestTemplate restTemplate;
-
-    @Value("${app.ckan-base-uri}")
-    private String baseUri;
 
     @Autowired
     private RequestService requestService;
@@ -62,5 +56,10 @@ public class HandleRequestController {
     @GetMapping("/list-groups")
     public ResponseEntity<List<Group>> listGroups(HttpServletRequest request) {
         return new ResponseEntity<>(requestService.listGroups(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    }
+
+    @GetMapping("/list-datasets-per-group")
+    public ResponseEntity<List<Dataset>> listDatasetsPerGroup(@RequestParam("group_id") String groupId, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.listDatasetsPerGroup(groupId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
 }

@@ -48,6 +48,9 @@ public class RequestService {
     @Value("${app.ckan-list-groups-uri}")
     private String listGroupsUri;
 
+    @Value("${app.ckan-list-datasets-per-group-uri}")
+    private String listDatasetsPerGroupUri;
+
     public List<CaseStudy> listCaseStudies(String auth) {
 
         // Headers
@@ -163,5 +166,26 @@ public class RequestService {
         ResponseEntity<GroupListResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), GroupListResultCkan.class, params);
 
         return response.getBody().getResult().stream().map(DTOConverter::convert).collect(Collectors.toList());
+    }
+
+    public List<Dataset> listDatasetsPerGroup(String groupId, String auth) {
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + listDatasetsPerGroupUri)
+                .queryParam("group_id", "{group_id}")
+                .encode()
+                .toUriString();
+
+        // Create params map
+        Map<String, String> params = new HashMap<>();
+        params.put("group_id", groupId);
+
+        // API call
+        ResponseEntity<DatasetListResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
+
+        return response.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }
 }
