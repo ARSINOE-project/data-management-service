@@ -5,16 +5,18 @@ import gr.athenarc.datamanagementservice.dto.Dataset;
 import gr.athenarc.datamanagementservice.dto.Group;
 import gr.athenarc.datamanagementservice.dto.Resource;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
+import gr.athenarc.datamanagementservice.exception.DatasetNotFoundException;
+import gr.athenarc.datamanagementservice.exception.GroupNotFoundException;
+import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
 import gr.athenarc.datamanagementservice.util.DTOConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -47,6 +49,9 @@ public class RequestService {
 
     @Value("${app.ckan-list-groups-uri}")
     private String listGroupsUri;
+
+    @Value("${app.ckan-get-group-info-uri}")
+    private String groupInfoUri;
 
     @Value("${app.ckan-list-datasets-per-group-uri}")
     private String listDatasetsPerGroupUri;
@@ -119,7 +124,17 @@ public class RequestService {
         params.put("id", datasetId);
 
         // API call
-        ResponseEntity<DatasetInfoResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetInfoResultCkan.class, params);
+        ResponseEntity<DatasetInfoResultCkan> response;
+
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetInfoResultCkan.class, params);
+        }
+        catch(RestClientResponseException e) {
+            if(e.getRawStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                throw new DatasetNotFoundException(datasetId);
+            }
+            throw e;
+        }
 
         return DTOConverter.convert(response.getBody().getResult());
     }
@@ -141,7 +156,17 @@ public class RequestService {
         params.put("id", resourceId);
 
         // API call
-        ResponseEntity<ResourceInfoResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), ResourceInfoResultCkan.class, params);
+        ResponseEntity<ResourceInfoResultCkan> response;
+
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), ResourceInfoResultCkan.class, params);
+        }
+        catch(RestClientResponseException e) {
+            if(e.getRawStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                throw new ResourceNotFoundException(resourceId);
+            }
+            throw e;
+        }
 
         return DTOConverter.convert(response.getBody().getResult());
     }
@@ -168,7 +193,52 @@ public class RequestService {
         return response.getBody().getResult().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }
 
+    public Group getGroupInfo(String groupId, String auth) {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + groupInfoUri)
+                .queryParam("id", "{id}")
+                .queryParam("include_users", "{include_users}")
+                .queryParam("include_extras", "{include_extras}")
+                .queryParam("include_tags", "{include_tags}")
+                .queryParam("include_groups", "{include_groups}")
+                .encode()
+                .toUriString();
+
+        // Create params map
+        Map<String, String> params = new HashMap<>();
+        params.put("id", groupId);
+        params.put("include_users", "false");
+        params.put("include_extras", "false");
+        params.put("include_tags", "false");
+        params.put("include_groups", "false");
+
+
+        // API call
+        ResponseEntity<GroupInfoCkan> response;
+
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), GroupInfoCkan.class, params);
+        }
+        catch(RestClientResponseException e) {
+            if(e.getRawStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                throw new GroupNotFoundException(groupId);
+            }
+            throw e;
+        }
+
+        return DTOConverter.convert(response.getBody().getResult());
+    }
+
     public List<Dataset> listDatasetsPerGroup(String groupId, String auth) {
+
+        // Make sure that the group exists
+        Group group = getGroupInfo(groupId, auth);
+
         // Headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, auth);
