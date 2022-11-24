@@ -11,7 +11,6 @@ List Case Studies
 --------------------------
 
 .. http:post:: /list-case-studies
-   :noindex:
    
       Lists the case studies of the catalogue.
    
