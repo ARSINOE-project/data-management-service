@@ -1,8 +1,9 @@
-.. |baseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr/data-management-service
-
 #############
 Documentation for the Arsinoe Data Management Service
 #############
+
+.. |baseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr/data-management-service
+
 
 The Arsinoe Data Management Service provides endpoints to simplify the machine-to-machine interaction with the Arsinoe Data Catalogue.
 
