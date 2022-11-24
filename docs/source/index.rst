@@ -27,8 +27,7 @@ List Case Studies
 
 .. sourcecode:: bash
   
-    curl --location --request GET '|baseURL|/list-case-studies' \
-   --header 'Authorization: token'
+    curl --request GET ' |baseURL| /list-case-studies' --header 'Authorization: token'
 
 **Example Response**
 
