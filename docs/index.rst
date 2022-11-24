@@ -7,15 +7,11 @@ Data Management Service Endpoints
 --------------------------------
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key, found at the bottom-left corner of the screen of the profile can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
 
-.. http:{get}:: {list-case-studies}
+.. http:get:: list-case-studies
    :noindex:
    
-     {Lists the case studies of the catalogue.}
-	 
-   :query {data type}: {optional parmeter explantation}
-   
-   :form {data type}: {optional parmeter explantation
-   
-   :requestheader {Authorization}
+     Lists the case studies of the catalogue.
+
+   :requestheader Authorization: `API Token`
 
 The Arsinoe Data Management Service has its documentation hosted on Read the Docs.
