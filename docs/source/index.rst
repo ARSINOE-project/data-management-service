@@ -7,8 +7,8 @@ Data Management Service Endpoints
 --------------------------------
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key, found at the bottom-left corner of the screen of the profile can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
 
-List Case Studies
----------------------
+
+### List Case Studies
 
 .. http:get:: /list-case-studies
    
@@ -16,8 +16,8 @@ List Case Studies
    
    :requestheader Authorization: optional `API token`
 
-List Datasets
----------------------
+
+### List Datasets
 
 .. http:get:: /list-datasets
 
@@ -29,8 +29,8 @@ List Datasets
 
    :statuscode 404: The provided `case_study_id` does not match a case study in the Data Catalogue.
 
-Retrieve Dataset Info
----------------------
+
+### Retrieve Dataset Info
 
 .. http:get:: /dataset-info
 
@@ -42,8 +42,8 @@ Retrieve Dataset Info
 
    :statuscode 404: No dataset was found with the provided id.
 
-Retrieve Resource Info
----------------------
+
+### Retrieve Resource Info
 
 .. http:get:: /resource-info
 
@@ -55,8 +55,8 @@ Retrieve Resource Info
 
    :statuscode 404: No resource was found with the provided id.
 
-Download Resource
----------------------
+
+### Download Resource
 
 .. http:get:: /download-resource
 
@@ -70,8 +70,8 @@ Download Resource
 
    :statuscode 404: No resource was found with the provided id.
 
-List Groups
----------------------
+
+### List Groups
 
 .. http:get:: /list-groups
 
@@ -79,8 +79,8 @@ List Groups
 
    :requestheader Authorization: optional `API token`
 
-Retrieve Group Info
----------------------
+
+### Retrieve Group Info
 
 .. http:get:: /group-info
 
@@ -92,8 +92,8 @@ Retrieve Group Info
 
    :statuscode 404: No group was found with the provided id.
 
-List Datasets per Group
----------------------
+
+### List Datasets per Group
 
 .. http:get:: /list-datasets-per-group
 
