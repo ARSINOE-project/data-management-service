@@ -16,4 +16,20 @@ List Case Studies
    
    :requestheader Authorization: `token`
 
+.. http:post:: /list-datasets
+
+      Lists the datasets of the catalogue.
+
+   :query string:  case_study_id (*optional*) -- The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
+
+   :requestheader Authorization: `token`
+
+.. http:post:: /dataset-info
+
+      Returns the information of the specified dataset.
+
+   :query string:  dataset_id (*required*) -- The id of the dataset.
+
+   :requestheader Authorization: `token`
+
 The Arsinoe Data Management Service has its documentation hosted on Read the Docs.
