@@ -7,12 +7,10 @@ Data Management Service Endpoints
 --------------------------------
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key, found at the bottom-left corner of the screen of the profile can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
 
-:ref:`routingtable`
-
 List Case Studies
 ---------------------
 
-.. http:post:: /list-case-studies
+.. http:get:: /list-case-studies
    
       Retrieves a list of the case studies in the Data Catalogue.
    
@@ -21,7 +19,7 @@ List Case Studies
 List Datasets
 ---------------------
 
-.. http:post:: /list-datasets
+.. http:get:: /list-datasets
 
       Retrieves a list of the datasets in the Data Catalogue.
 
@@ -34,7 +32,7 @@ List Datasets
 Retrieve Dataset Info
 ---------------------
 
-.. http:post:: /dataset-info
+.. http:get:: /dataset-info
 
       Retrieves the information of the specified dataset.
 
@@ -47,7 +45,7 @@ Retrieve Dataset Info
 Retrieve Resource Info
 ---------------------
 
-.. http:post:: /resource-info
+.. http:get:: /resource-info
 
       Retrieves the information of the specified resource.
 
@@ -60,7 +58,7 @@ Retrieve Resource Info
 Download Resource
 ---------------------
 
-.. http:post:: /download-resource
+.. http:get:: /download-resource
 
       Redirects to the download url of the resource in the Data Catalogue.
 
@@ -75,7 +73,7 @@ Download Resource
 List Groups
 ---------------------
 
-.. http:post:: /list-groups
+.. http:get:: /list-groups
 
       Retrieves a list of the groups in the Data Catalogue.
 
@@ -84,7 +82,7 @@ List Groups
 Retrieve Group Info
 ---------------------
 
-.. http:post:: /group-info
+.. http:get:: /group-info
 
       Retrieves the information of the specified group.
    
@@ -97,7 +95,7 @@ Retrieve Group Info
 List Datasets per Group
 ---------------------
 
-.. http:post:: /list-datasets-per-group
+.. http:get:: /list-datasets-per-group
 
       Retrieves a list of datasets that belong to the specified group.
    
