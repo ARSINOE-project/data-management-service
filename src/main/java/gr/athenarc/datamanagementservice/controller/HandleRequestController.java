@@ -51,7 +51,7 @@ public class HandleRequestController {
     public ResponseEntity<Void> downloadResource(@RequestParam("resource_id") String resourceId, HttpServletRequest request) {
         Resource r = requestService.getResourceInfo(resourceId, request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        return ResponseEntity.status(HttpStatus.FOUND)
+        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
                 .location(URI.create(r.getUrl()))
                 .build();
     }

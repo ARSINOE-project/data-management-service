@@ -2,7 +2,8 @@
 Documentation for the Arsinoe Data Management Service
 #############
 
-.. |baseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr/data-management-service
+.. |catalogueBaseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr
+.. |serviceBaseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr/data-management-service
 
 
 The Arsinoe Data Management Service provides endpoints to simplify the machine-to-machine interaction with the Arsinoe Data Catalogue.
@@ -11,7 +12,7 @@ The Arsinoe Data Management Service provides endpoints to simplify the machine-t
 Data Management Service Endpoints
 *************
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key, found at the bottom-left corner of the screen of the profile can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
-The base url for all the endpoints is |baseURL|
+The base URL of the Data Catalogue is |catalogueBaseURL| and the base URL for the data management service is |serviceBaseURL|
 
 ===========
 List Case Studies
@@ -95,7 +96,7 @@ List Datasets
                "format": "SHP",
                "name": "natura-2000-greece",
                "size": 5478508,
-               "url": "https://arsinoe-dev.madgik.di.uoa.gr/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
+               "url": "{catalogueBaseURL}/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
                "last_modified": "2022-10-25T12:50:48.330817",
                "resource_type": null
             }
@@ -136,7 +137,7 @@ Retrieve Dataset Info
 
 **Example Response**
 
-Same as in :ref:`List Datasets` but instead of a list, returns a single object.
+Same as in `List Datasets`_ but instead of a list, returns a single object.
 
 ===========
 Retrieve Resource Info
@@ -152,6 +153,27 @@ Retrieve Resource Info
 
    :statuscode 404: No resource was found with the provided id.
 
+**Example Request**
+
+.. sourcecode:: bash
+  
+   curl --request GET '{baseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
+**Example Response**
+
+.. sourcecode:: json
+
+   {
+      "id": "dea64b6b-5bf7-4698-bb88-d095be9c4ccb",
+      "created": "2022-10-25T12:50:48.367494",
+      "description": "natura 2000 greece in shapefile format",
+      "format": "SHP",
+      "name": "natura-2000-greece",
+      "size": 5478508,
+      "url": "{catalogueBaseURL}/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
+      "last_modified": "2022-10-25T12:50:48.330817",
+      "resource_type": null
+   }
+
 ===========
 Download Resource
 ===========
@@ -164,9 +186,15 @@ Download Resource
 
    :requestheader Authorization: optional `API token`
 
-   :statuscode 302: The resource download url was retrieved successfully.
+   :statuscode 301: The resource download url was retrieved successfully.
 
    :statuscode 404: No resource was found with the provided id.
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+   curl --request GET '{baseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
 
 ===========
 List Groups
@@ -177,6 +205,27 @@ List Groups
       Retrieves a list of the groups in the Data Catalogue.
 
    :requestheader Authorization: optional `API token`
+
+**Example Request**
+
+.. sourcecode:: bash
+
+   curl --request GET '{serviceBaseURL}/list-groups' --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      {
+         "id": "43a41e36-2ce4-4bb8-ac8b-ab410ded2159",
+         "created": "2022-05-23T13:15:31.704607",
+         "title": "ARSINOE Public Datasets",
+         "description": "All datasets generated in the context of ARSINOE project and are public",
+         "image_url": "https://arsinoe-project.eu/securstorage/2022/02/logo-2x.png",
+         "number_of_datasets": 2
+      }
+   ]
 
 ===========
 Retrieve Group Info
