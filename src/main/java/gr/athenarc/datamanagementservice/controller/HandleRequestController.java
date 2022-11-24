@@ -33,7 +33,7 @@ public class HandleRequestController {
     }
 
     @GetMapping("/list-datasets")
-    public ResponseEntity<List<Dataset>> listDatasets(@RequestParam(name = "case_study", required = false) String caseStudyId, HttpServletRequest request) {
+    public ResponseEntity<List<Dataset>> listDatasets(@RequestParam(name = "case_study_id", required = false) String caseStudyId, HttpServletRequest request) {
         return new ResponseEntity<>(requestService.listDatasets(caseStudyId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
 
