@@ -1,3 +1,5 @@
+.. |baseURL| replace:: https://arsinoe-dev.madgik.di.uoa.gr/data-management-service
+
 #############
 Documentation for the Arsinoe Data Management Service
 #############
@@ -8,6 +10,7 @@ The Arsinoe Data Management Service provides endpoints to simplify the machine-t
 Data Management Service Endpoints
 *************
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key, found at the bottom-left corner of the screen of the profile can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
+The base url for all the endpoints is |baseURL|
 
 ===========
 List Case Studies
@@ -18,6 +21,37 @@ List Case Studies
       Retrieves a list of the case studies in the Data Catalogue.
    
    :requestheader Authorization: optional `API token`
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+    curl --location --request GET '|baseURL|/list-case-studies' \
+   --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      {
+         "id": "408463d1-b4a2-40a6-bca6-5b69ee3b26a2",
+         "title": "Case Study 1",
+         "name": "case-study-1",
+         "created": "2022-10-20T12:05:38.619616",
+         "description": "A description for case study 1",
+         "image_url": "https://arsinoe-project.eu/securstorage/2022/02/cs1.jpg"
+      },
+      {
+         "id": "5fc66e62-9566-4ac7-8060-956dcf776bdc",
+         "title": "Case Study 2",
+         "name": "case-study-2",
+         "created": "2022-10-20T13:05:38.619616",
+         "description": "A description for case study 2",
+         "image_url": ""
+      },
+   ]
+
 
 ===========
 List Datasets
