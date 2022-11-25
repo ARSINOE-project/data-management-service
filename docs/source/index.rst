@@ -33,7 +33,7 @@ List Case Studies
 
 .. sourcecode:: bash
   
-    curl --request GET ' {baseURL}/list-case-studies' --header 'Authorization: token'
+    curl --request GET ' {serviceBaseURL}/list-case-studies' --header 'Authorization: token'
 
 **Example Response**
 
@@ -77,7 +77,7 @@ List Datasets
 
 .. sourcecode:: bash
   
-   curl --request GET '{baseURL}/list-datasets' --header 'Authorization: token'
+   curl --request GET '{serviceBaseURL}/list-datasets' --header 'Authorization: token'
 
 **Example Response**
 
@@ -138,7 +138,7 @@ Retrieve Dataset Info
 
 .. sourcecode:: bash
   
-   curl --request GET '{baseURL}/dataset-info?dataset_id=d551d2ff-0902-4576-a610-942e230faaa4' --header 'Authorization: token'
+   curl --request GET '{serviceBaseURL}/dataset-info?dataset_id=d551d2ff-0902-4576-a610-942e230faaa4' --header 'Authorization: token'
 
 **Example Response**
 
@@ -162,7 +162,7 @@ Retrieve Resource Info
 
 .. sourcecode:: bash
   
-   curl --request GET '{baseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
+   curl --request GET '{serviceBaseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
 
 **Example Response**
 
@@ -200,7 +200,7 @@ Download Resource
 
 .. sourcecode:: bash
   
-   curl --location --request GET '{baseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
+   curl --location --request GET '{serviceBaseURL}/resource-info?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
 
 .. note::
 
@@ -346,7 +346,7 @@ List Datasets per Group
                "format": "SHP",
                "name": "TREES_ISTORIC CENTER.zip",
                "size": 779413,
-               "url": "{baseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/3a8ba553-ba2d-4720-bc41-e9faa1a87d6d/download/trees_istoric-center.zip",
+               "url": "{catalogueBaseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/3a8ba553-ba2d-4720-bc41-e9faa1a87d6d/download/trees_istoric-center.zip",
                "last_modified": "2022-06-21T10:31:45.555831",
                "resource_type": null
             },
@@ -357,7 +357,7 @@ List Datasets per Group
                "format": "GeoJSON",
                "name": "test.geojson",
                "size": 6599826,
-               "url": "{baseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/1d63af36-4743-44fe-a26a-a43b031d814a/download/test.geojson",
+               "url": "{catalogueBaseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/1d63af36-4743-44fe-a26a-a43b031d814a/download/test.geojson",
                "last_modified": "2022-06-21T16:05:44.153692",
                "resource_type": null
             },
@@ -368,7 +368,7 @@ List Datasets per Group
                "format": "SHP",
                "name": "mydataset.zip",
                "size": 694781,
-               "url": "{baseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/df06320d-2e7c-4b74-9ca0-5ccd9eae4af2/download/mydataset.zip",
+               "url": "{catalogueBaseURL}/dataset/5bcb70b5-0e6e-47eb-a99d-7e24a6f2d3c8/resource/df06320d-2e7c-4b74-9ca0-5ccd9eae4af2/download/mydataset.zip",
                "last_modified": "2022-06-22T08:39:01.015468",
                "resource_type": null
             }
