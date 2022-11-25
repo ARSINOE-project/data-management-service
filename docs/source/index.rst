@@ -67,8 +67,7 @@ List Datasets
 
    Retrieves a list of the datasets in the Data Catalogue.
 
-   :query case_study_id: (*optional*) - The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
-   :type case_study_id: string
+   :query string case_study_id: (*optional*) - The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
 
    :requestheader Authorization: optional `API token`
 
