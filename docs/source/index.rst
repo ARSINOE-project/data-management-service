@@ -24,6 +24,8 @@ List Case Studies
 ===========
 
 .. http:get:: /list-case-studies
+
+   :noindex:
    
    Retrieves a list of the case studies in the Data Catalogue.
    
@@ -64,6 +66,8 @@ List Datasets
 ===========
 
 .. http:get:: /list-datasets
+
+   :noindex:
 
    Retrieves a list of the datasets in the Data Catalogue.
 
@@ -126,6 +130,8 @@ Retrieve Dataset Info
 
 .. http:get:: /dataset-info
 
+   :noindex:
+
    Retrieves the information of the specified dataset.
 
    :query string:  dataset_id (*required*) -- The id of the dataset.
@@ -149,6 +155,8 @@ Retrieve Resource Info
 ===========
 
 .. http:get:: /resource-info
+
+   :noindex:
 
    Retrieves the information of the specified resource.
 
@@ -186,6 +194,8 @@ Download Resource
 
 .. http:get:: /download-resource
 
+   :noindex:
+
    Redirects to the download url of the resource in the Data Catalogue.
 
    :query string:  resource_id (*required*) -- The id of the resource.
@@ -204,13 +214,15 @@ Download Resource
 
 .. note::
 
-   The `--location` option instructs curl to follow redirects.
+   The ``--location`` option instructs curl to follow redirects.
 
 ===========
 List Groups
 ===========
 
 .. http:get:: /list-groups
+
+   :noindex:
 
    Retrieves a list of the groups in the Data Catalogue.
 
@@ -242,6 +254,8 @@ Retrieve Group Info
 ===========
 
 .. http:get:: /group-info
+
+   :noindex:
 
    Retrieves the information of the specified group.
    
@@ -275,6 +289,8 @@ List Datasets per Group
 ===========
 
 .. http:get:: /list-datasets-per-group
+
+   :noindex:
 
    Retrieves a list of datasets that belong to the specified group.
    
