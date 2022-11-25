@@ -20,7 +20,7 @@ List Case Studies
 
 .. http:get:: /list-case-studies
    
-      Retrieves a list of the case studies in the Data Catalogue.
+   Retrieves a list of the case studies in the Data Catalogue.
    
    :requestheader Authorization: optional `API token`
 
