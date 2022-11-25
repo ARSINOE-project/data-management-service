@@ -10,10 +10,6 @@ The Arsinoe Data Management Service provides endpoints to simplify the machine-t
 
 .. contents:: Table of Contents
 
-   :depth: 2
-
-   Data Management Service Endpoints
-
 *************
 Data Management Service Endpoints
 *************
