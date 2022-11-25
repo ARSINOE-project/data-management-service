@@ -8,6 +8,10 @@ Documentation for the Arsinoe Data Management Service
 
 The Arsinoe Data Management Service provides endpoints to simplify the machine-to-machine interaction with the Arsinoe Data Catalogue.
 
+.. toctree::
+
+   Data Management Service Endpoints
+
 *************
 Data Management Service Endpoints
 *************
