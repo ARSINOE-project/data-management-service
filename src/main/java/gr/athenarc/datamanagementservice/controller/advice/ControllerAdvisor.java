@@ -1,5 +1,6 @@
 package gr.athenarc.datamanagementservice.controller.advice;
 
+import gr.athenarc.datamanagementservice.exception.CaseStudyNotFoundException;
 import gr.athenarc.datamanagementservice.exception.DatasetNotFoundException;
 import gr.athenarc.datamanagementservice.exception.GroupNotFoundException;
 import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
@@ -15,6 +16,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(CaseStudyNotFoundException.class)
+    public ResponseEntity<Void> handleCaseStudyNotFoundException(CaseStudyNotFoundException e, WebRequest request) {
+        log.info("CaseStudyNotFound occurred, resource id = {}", e.getCaseStudyId());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Void> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
         log.info("ResourceNotFoundException occurred, resource id = {}", e.getResourceId());

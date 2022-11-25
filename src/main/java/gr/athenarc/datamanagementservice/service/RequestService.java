@@ -5,6 +5,7 @@ import gr.athenarc.datamanagementservice.dto.Dataset;
 import gr.athenarc.datamanagementservice.dto.Group;
 import gr.athenarc.datamanagementservice.dto.Resource;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
+import gr.athenarc.datamanagementservice.exception.CaseStudyNotFoundException;
 import gr.athenarc.datamanagementservice.exception.DatasetNotFoundException;
 import gr.athenarc.datamanagementservice.exception.GroupNotFoundException;
 import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
@@ -103,6 +104,11 @@ public class RequestService {
 
         // API call
         ResponseEntity<DatasetListResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
+
+        Boolean orgFound = response.getBody().getResult().getOrganizationFound();
+        if(orgFound != null && orgFound == false) {
+            throw new CaseStudyNotFoundException(caseStudyId);
+        }
 
         return response.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }

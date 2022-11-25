@@ -9,6 +9,9 @@ import java.util.Map;
 @Data
 public class DatasetListCkan {
 
+    @JsonProperty("organization_found")
+    private Boolean organizationFound;
+
     private int count;
 
     private Map<String, Object> facets;
