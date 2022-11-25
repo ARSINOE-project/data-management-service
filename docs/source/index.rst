@@ -17,7 +17,7 @@ The Arsinoe Data Management Service provides endpoints to simplify the machine-t
 Data Management Service Endpoints
 *************
 The endpoints listed below may also receive an API token in the Authorization header. An API token can be issued by navigating to the profile page and clicking on the API Tokens tab. Alternatively, the auto-generated API Key found at the bottom-left corner of the profile page can be used. Including a token in the requests identifies the user and yields results according to the user's rights on the platform. Otherwise, only public elements of the platform will be returned. 
-The base URL of the Data Catalogue is |catalogueBaseURL| and the base URL for the data management service is |serviceBaseURL|
+The base URL of the Data Catalogue is |catalogueBaseURL| and the base URL of the data management service is |serviceBaseURL|
 
 ===========
 List Case Studies
@@ -67,7 +67,8 @@ List Datasets
 
    Retrieves a list of the datasets in the Data Catalogue.
 
-   :query string:  case_study_id (*optional*) -- The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
+   :query case_study_id: (*optional*) - The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
+   :type case_study_id: string
 
    :requestheader Authorization: optional `API token`
 
