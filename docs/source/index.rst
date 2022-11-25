@@ -67,9 +67,9 @@ List Datasets
 
    Retrieves a list of the datasets in the Data Catalogue.
 
-   :query string case_study_id: (*optional*) - The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned.
+   :query string case_study_id: The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned. (*optional*)
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: The provided `case_study_id` does not match a case study in the Data Catalogue.
 
@@ -128,9 +128,9 @@ Retrieve Dataset Info
 
    Retrieves the information of the specified dataset.
 
-   :query string:  dataset_id (*required*) -- The id of the dataset.
+   :query string dataset_id: The id of the dataset.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: No dataset was found with the provided id.
 
@@ -152,9 +152,9 @@ Retrieve Resource Info
 
    Retrieves the information of the specified resource.
 
-   :query string:  resource_id (*required*) -- The id of the resource.
+   :query string resource_id: The id of the resource.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: No resource was found with the provided id.
 
@@ -188,9 +188,9 @@ Download Resource
 
    Redirects to the download url of the resource in the Data Catalogue.
 
-   :query string:  resource_id (*required*) -- The id of the resource.
+   :query string resource_id: The id of the resource.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 301: The resource download url was retrieved successfully.
 
@@ -245,9 +245,9 @@ Retrieve Group Info
 
    Retrieves the information of the specified group.
    
-   :query string:  group_id (*required*) -- The id of the group.
+   :query string group_id: The id of the group.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: No group was found with the provided id.
 
@@ -278,9 +278,9 @@ List Datasets per Group
 
    Retrieves a list of datasets that belong to the specified group.
    
-   :query string:  group_id (*required*) -- The id of the group.
+   :query string group_id: The id of the group.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: No group was found with the provided id.
 
