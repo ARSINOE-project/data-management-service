@@ -1,9 +1,6 @@
 package gr.athenarc.datamanagementservice.controller.advice;
 
-import gr.athenarc.datamanagementservice.exception.CaseStudyNotFoundException;
-import gr.athenarc.datamanagementservice.exception.DatasetNotFoundException;
-import gr.athenarc.datamanagementservice.exception.GroupNotFoundException;
-import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
+import gr.athenarc.datamanagementservice.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.List;
+import java.util.Map;
 
 @ControllerAdvice
 @Slf4j
@@ -37,5 +37,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Void> handleGroupNotFoundException(GroupNotFoundException e, WebRequest request) {
         log.info("GroupNotFoundException occurred, group id = {}", e.getGroupId());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(NewDatasetCreateException.class)
+    public ResponseEntity<Map<String, List<String>>> handleNewDatasetCreateException(NewDatasetCreateException e, WebRequest request) {
+        log.info("NewDatasetCreateException occurred");
+        return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
     }
 }

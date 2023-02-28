@@ -17,7 +17,7 @@ public class DatasetCkan {
     @JsonProperty("creator_user_id")
     private String creatorUserId;
 
-    @JsonProperty("dataset_type")
+    @JsonProperty("dataset_type_arsinoe")
     private String datasetType;
 
     private String doi;

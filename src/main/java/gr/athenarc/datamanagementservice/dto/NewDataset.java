@@ -6,9 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Dataset {
-
-    private String id;
+public class NewDataset {
 
     private String title;
 
@@ -18,21 +16,6 @@ public class Dataset {
 
     @JsonProperty("license_id")
     private String licenseId;
-
-    @JsonProperty("license_title")
-    private String licenseTitle;
-
-    @JsonProperty("license_url")
-    private String licenseUrl;
-
-    @JsonProperty("private")
-    private boolean isPrivate;
-
-    @JsonProperty("case_study_id")
-    private String caseStudyId;
-
-    @JsonProperty("number_of_resources")
-    private Integer numResources;
 
     @JsonProperty("publication_date")
     private String publicationDate;
@@ -59,5 +42,9 @@ public class Dataset {
 
     private List<String> tags;
 
-    private List<Resource> resources;
+    @JsonProperty("case_study")
+    private String caseStudy;
+
+    @JsonProperty("private")
+    private boolean isPrivate;
 }

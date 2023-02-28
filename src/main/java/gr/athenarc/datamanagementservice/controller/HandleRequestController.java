@@ -1,9 +1,6 @@
 package gr.athenarc.datamanagementservice.controller;
 
-import gr.athenarc.datamanagementservice.dto.CaseStudy;
-import gr.athenarc.datamanagementservice.dto.Dataset;
-import gr.athenarc.datamanagementservice.dto.Group;
-import gr.athenarc.datamanagementservice.dto.Resource;
+import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
 import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,8 +28,11 @@ public class HandleRequestController {
     }
 
     @GetMapping("/list-datasets")
-    public ResponseEntity<List<Dataset>> listDatasets(@RequestParam(name = "case_study_id", required = false) String caseStudyId, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listDatasets(caseStudyId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<List<Dataset>> listDatasets(
+            @RequestParam(name = "case_study_id", required = false) String caseStudyId,
+            @RequestParam(name = "page") int page,
+            HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
 
     @GetMapping("/dataset-info")
@@ -69,5 +67,15 @@ public class HandleRequestController {
     @GetMapping("/list-datasets-per-group")
     public ResponseEntity<List<Dataset>> listDatasetsPerGroup(@RequestParam("group_id") String groupId, HttpServletRequest request) {
         return new ResponseEntity<>(requestService.listDatasetsPerGroup(groupId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    }
+
+    @GetMapping("/list-licenses")
+    public ResponseEntity<List<License>> listLicenses(HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.listLicenses(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    }
+
+    @PostMapping("/create-dataset")
+    public ResponseEntity<Dataset> createDataset(@RequestBody NewDataset newDataset, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.createDataset(newDataset, (request.getHeader(HttpHeaders.AUTHORIZATION))), HttpStatus.CREATED);
     }
 }

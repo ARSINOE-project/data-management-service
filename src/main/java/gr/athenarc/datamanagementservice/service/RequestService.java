@@ -1,14 +1,10 @@
 package gr.athenarc.datamanagementservice.service;
 
-import gr.athenarc.datamanagementservice.dto.CaseStudy;
-import gr.athenarc.datamanagementservice.dto.Dataset;
-import gr.athenarc.datamanagementservice.dto.Group;
-import gr.athenarc.datamanagementservice.dto.Resource;
+import com.google.gson.Gson;
+import com.google.gson.internal.LinkedTreeMap;
+import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
-import gr.athenarc.datamanagementservice.exception.CaseStudyNotFoundException;
-import gr.athenarc.datamanagementservice.exception.DatasetNotFoundException;
-import gr.athenarc.datamanagementservice.exception.GroupNotFoundException;
-import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
+import gr.athenarc.datamanagementservice.exception.*;
 import gr.athenarc.datamanagementservice.util.DTOConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +28,9 @@ public class RequestService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private Gson gson;
 
     @Value("${app.ckan-base-uri}")
     private String baseUri;
@@ -57,6 +56,12 @@ public class RequestService {
     @Value("${app.ckan-list-datasets-per-group-uri}")
     private String listDatasetsPerGroupUri;
 
+    @Value("${app.ckan-list-licenses}")
+    private String listLicensesUri;
+
+    @Value("${app.ckan-create-dataset}")
+    private String createDatasetUri;
+
     public List<CaseStudy> listCaseStudies(String auth) {
 
         // Headers
@@ -79,7 +84,7 @@ public class RequestService {
         return response.getBody().getResult().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }
 
-    public List<Dataset> listDatasets(String caseStudyId, String auth) {
+    public List<Dataset> listDatasets(String caseStudyId, int page, String auth) {
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
@@ -88,6 +93,8 @@ public class RequestService {
         // Build URL and params map
         String urlTemplate;
         Map<String, String> params = new HashMap<>();
+
+        params.put("page", Integer.toString(page));
 
         if(ObjectUtils.isEmpty(caseStudyId)) {
             urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + listDatasetsUri)
@@ -263,5 +270,49 @@ public class RequestService {
         ResponseEntity<DatasetListResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
 
         return response.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+    }
+
+    public List<License> listLicenses(String auth) {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + listLicensesUri).encode().toUriString();
+
+        // API call
+        ResponseEntity<ListLicensesResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), ListLicensesResultCkan.class);
+
+        return response.getBody().getResult();
+    }
+
+    public Dataset createDataset(NewDataset newDataset, String auth) {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + createDatasetUri).encode().toUriString();
+
+        NewDatasetCkan ndc = DTOConverter.convert(newDataset);
+
+        // API call
+        ResponseEntity<DatasetInfoResultCkan> response;
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(ndc, headers), DatasetInfoResultCkan.class);
+            return DTOConverter.convert(response.getBody().getResult());
+        } catch (RestClientResponseException e) {
+            if (e.getRawStatusCode() == HttpStatus.CONFLICT.value()) {
+                Map<String, Object> errorResponse = gson.fromJson(e.getResponseBodyAsString(), Map.class);
+                Map<String, List<String>> errors = (Map<String, List<String>>) errorResponse.get("error");
+                errors.remove("__type");
+                throw new NewDatasetCreateException(errors);
+            }
+            else {
+                throw new RuntimeException("Unexpected error!");
+            }
+        }
     }
 }

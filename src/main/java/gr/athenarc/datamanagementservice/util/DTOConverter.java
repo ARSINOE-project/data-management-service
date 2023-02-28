@@ -1,13 +1,7 @@
 package gr.athenarc.datamanagementservice.util;
 
-import gr.athenarc.datamanagementservice.dto.CaseStudy;
-import gr.athenarc.datamanagementservice.dto.Dataset;
-import gr.athenarc.datamanagementservice.dto.Group;
-import gr.athenarc.datamanagementservice.dto.Resource;
-import gr.athenarc.datamanagementservice.dto.ckan.CaseStudyCkan;
-import gr.athenarc.datamanagementservice.dto.ckan.DatasetCkan;
-import gr.athenarc.datamanagementservice.dto.ckan.GroupCkan;
-import gr.athenarc.datamanagementservice.dto.ckan.ResourceCkan;
+import gr.athenarc.datamanagementservice.dto.*;
+import gr.athenarc.datamanagementservice.dto.ckan.*;
 
 import java.util.stream.Collectors;
 
@@ -32,6 +26,11 @@ public class DTOConverter {
         d.setTitle(dc.getTitle());
         d.setName(dc.getName());
         d.setDescription(dc.getNotes());
+        d.setResourceType(dc.getResourceType());
+        d.setDatasetType(dc.getDatasetType());
+        d.setAuthorEmail(dc.getAuthorEmail());
+        d.setMaintainer(dc.getMaintainer());
+        d.setMaintainerEmail(dc.getMaintainerEmail());
         d.setLicenseId(dc.getLicenseId());
         d.setLicenseTitle(dc.getLicenseTitle());
         d.setLicenseUrl(dc.getLicenseUrl());
@@ -47,6 +46,7 @@ public class DTOConverter {
         d.setOrigin(dc.getOrigin());
         d.setDatasetType(dc.getDatasetType());
         d.setResources(dc.getResources().stream().map(DTOConverter::convert).collect(Collectors.toList()));
+        d.setTags(dc.getTags().stream().map(tagCkan -> tagCkan.getName()).collect(Collectors.toList()));
         return d;
     }
 
@@ -74,5 +74,29 @@ public class DTOConverter {
         g.setImageUrl(gc.getImageUrl());
         g.setNumberOfDatasets(gc.getPackageCount());
         return g;
+    }
+
+    public static NewDatasetCkan convert(NewDataset nd) {
+        NewDatasetCkan ndc = new NewDatasetCkan();
+        ndc.setCaseStudy(nd.getCaseStudy());
+        ndc.setAuthor(nd.getAuthor());
+        ndc.setAuthorEmail(nd.getAuthorEmail());
+        ndc.setMaintainer(nd.getMaintainer());
+        ndc.setMaintainerEmail(nd.getMaintainerEmail());
+        ndc.setNotes(nd.getDescription());
+        ndc.setDoi(nd.getDoi());
+        ndc.setDatasetType(nd.getDatasetType());
+        ndc.setOrigin(nd.getOrigin());
+        ndc.setResourceType(nd.getResourceType());
+        ndc.setPrivate(nd.isPrivate());
+        ndc.setTitle(nd.getTitle());
+        ndc.setName(nd.getName());
+        ndc.setLicenseId(nd.getLicenseId());
+        ndc.setPublicationDate(nd.getPublicationDate());
+        ndc.setTags(nd.getTags().stream().map(tag -> new NewDatasetTagCkan(tag)).collect(Collectors.toList()));
+
+        System.out.println(ndc);
+
+        return ndc;
     }
 }
