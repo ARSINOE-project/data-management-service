@@ -6,7 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class NewDataset {
+public class UpdateDataset {
+
+    private String id;
 
     private String title;
 

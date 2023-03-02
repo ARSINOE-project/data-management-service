@@ -1,17 +1,18 @@
 package gr.athenarc.datamanagementservice.controller;
 
 import gr.athenarc.datamanagementservice.dto.*;
-import gr.athenarc.datamanagementservice.exception.ResourceNotFoundException;
 import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class HandleRequestController {
     @GetMapping("/list-datasets")
     public ResponseEntity<List<Dataset>> listDatasets(
             @RequestParam(name = "case_study_id", required = false) String caseStudyId,
-            @RequestParam(name = "page") int page,
+            @RequestParam(name = "page", defaultValue = "0") int page,
             HttpServletRequest request) {
         return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
@@ -76,6 +77,24 @@ public class HandleRequestController {
 
     @PostMapping("/create-dataset")
     public ResponseEntity<Dataset> createDataset(@RequestBody NewDataset newDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.createDataset(newDataset, (request.getHeader(HttpHeaders.AUTHORIZATION))), HttpStatus.CREATED);
+        return new ResponseEntity<>(requestService.upsertDataset(newDataset, null, request.getHeader(HttpHeaders.AUTHORIZATION), false), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update-dataset")
+    public ResponseEntity<Dataset> updateDataset(@RequestBody UpdateDataset updateDataset, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.upsertDataset(null, updateDataset, request.getHeader(HttpHeaders.AUTHORIZATION), true), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/create-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Resource> createResource(@RequestParam("resource") NewResource newResource, @RequestParam(value = "file", required = false) MultipartFile document, HttpServletRequest request) throws IOException {
+        boolean hasUrl = newResource.getUrl() != null;
+        boolean hasFile = document != null;
+
+        // Must provide exactly one of [newResource.url, document]
+        if((hasUrl && hasFile) || (!hasUrl && !hasFile)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return new ResponseEntity<>(requestService.createResource(newResource, document, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
     }
 }

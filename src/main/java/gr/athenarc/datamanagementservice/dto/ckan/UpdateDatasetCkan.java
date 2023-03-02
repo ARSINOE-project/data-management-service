@@ -1,18 +1,22 @@
-package gr.athenarc.datamanagementservice.dto;
+package gr.athenarc.datamanagementservice.dto.ckan;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class NewDataset {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UpdateDatasetCkan {
+
+    private String id;
 
     private String title;
 
     private String name;
 
-    private String description;
+    private String notes;
 
     @JsonProperty("license_id")
     private String licenseId;
@@ -37,12 +41,12 @@ public class NewDataset {
     @JsonProperty("resource_type")
     private String resourceType;
 
-    @JsonProperty("dataset_type")
+    @JsonProperty("dataset_type_arsinoe")
     private String datasetType;
 
-    private List<String> tags;
+    private List<NewDatasetTagCkan> tags;
 
-    @JsonProperty("case_study_id")
+    @JsonProperty("owner_org")
     private String caseStudy;
 
     @JsonProperty("private")

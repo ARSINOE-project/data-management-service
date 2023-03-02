@@ -1,22 +1,27 @@
 package gr.athenarc.datamanagementservice.service;
 
 import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
 import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
 import gr.athenarc.datamanagementservice.exception.*;
 import gr.athenarc.datamanagementservice.util.DTOConverter;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +36,9 @@ public class RequestService {
 
     @Autowired
     private Gson gson;
+
+    @Value("${app.page-size}")
+    private int pageSize;
 
     @Value("${app.ckan-base-uri}")
     private String baseUri;
@@ -62,6 +70,12 @@ public class RequestService {
     @Value("${app.ckan-create-dataset}")
     private String createDatasetUri;
 
+    @Value("${app.ckan-update-dataset}")
+    private String updateDatasetUri;
+
+    @Value("${app.ckan-create-resource}")
+    private String createResourceUri;
+
     public List<CaseStudy> listCaseStudies(String auth) {
 
         // Headers
@@ -84,6 +98,16 @@ public class RequestService {
         return response.getBody().getResult().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }
 
+    @AllArgsConstructor
+    private class PageInfo {
+        public int rows;
+        public int start;
+    }
+
+    private PageInfo getPageInfo(int page) {
+        return new PageInfo(pageSize, page*pageSize);
+    }
+
     public List<Dataset> listDatasets(String caseStudyId, int page, String auth) {
 
         // Headers
@@ -94,16 +118,22 @@ public class RequestService {
         String urlTemplate;
         Map<String, String> params = new HashMap<>();
 
-        params.put("page", Integer.toString(page));
+        PageInfo pageInfo = getPageInfo(page);
+        params.put("start", Integer.toString(pageInfo.start));
+        params.put("rows", Integer.toString(pageInfo.rows));
 
         if(ObjectUtils.isEmpty(caseStudyId)) {
             urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + listDatasetsUri)
+                    .queryParam("start", "{start}")
+                    .queryParam("rows", "{rows}")
                     .encode()
                     .toUriString();
         }
         else {
             urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + listDatasetsUri)
                     .queryParam("organization_id", "{organization_id}")
+                    .queryParam("start", "{start}")
+                    .queryParam("rows", "{rows}")
                     .encode()
                     .toUriString();
             params.put("organization_id", caseStudyId);
@@ -287,21 +317,29 @@ public class RequestService {
         return response.getBody().getResult();
     }
 
-    public Dataset createDataset(NewDataset newDataset, String auth) {
+    public Dataset upsertDataset(NewDataset newDataset, UpdateDataset updateDataset, String auth, boolean update) {
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, auth);
 
         // Build URL
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + createDatasetUri).encode().toUriString();
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + (update ? updateDatasetUri : createDatasetUri)).encode().toUriString();
 
-        NewDatasetCkan ndc = DTOConverter.convert(newDataset);
+        NewDatasetCkan ndc = new NewDatasetCkan();
+        UpdateDatasetCkan udc = new UpdateDatasetCkan();
+
+        if(update) {
+            udc = DTOConverter.convert(updateDataset);
+        }
+        else {
+            ndc = DTOConverter.convert(newDataset);
+        }
 
         // API call
         ResponseEntity<DatasetInfoResultCkan> response;
         try {
-            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(ndc, headers), DatasetInfoResultCkan.class);
+            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(update ? udc : ndc, headers), DatasetInfoResultCkan.class);
             return DTOConverter.convert(response.getBody().getResult());
         } catch (RestClientResponseException e) {
             if (e.getRawStatusCode() == HttpStatus.CONFLICT.value()) {
@@ -311,6 +349,57 @@ public class RequestService {
                 throw new NewDatasetCreateException(errors);
             }
             else {
+                throw new RuntimeException("Unexpected error!");
+            }
+        }
+    }
+
+    public Resource createResource(NewResource newResource, MultipartFile document, String auth) throws IOException {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // Body
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+        if(document != null) {
+            // This nested HttpEntity is important to create the correct
+            // Content-Disposition entry with metadata "name" and "filename"
+            MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+            ContentDisposition contentDisposition = ContentDisposition
+                    .builder("form-data")
+                    .name("upload")
+                    .filename(document.getOriginalFilename())
+                    .build();
+            fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+            HttpEntity<byte[]> fileEntity = new HttpEntity<>(document.getBytes(), fileMap);
+            body.add("upload", fileEntity);
+        }
+
+        Map<String, String> newResourceMap = newResource.toMap();
+        for(Map.Entry<String, String> entry: newResourceMap.entrySet()) {
+            body.add(entry.getKey(), entry.getValue());
+        }
+        System.out.println(body);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + createResourceUri).encode().toUriString();
+
+        // API call
+        ResponseEntity<ResourceInfoResultCkan> response;
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(body, headers), ResourceInfoResultCkan.class);
+            return DTOConverter.convert(response.getBody().getResult());
+        }
+        catch (RestClientResponseException e) {
+            if (e.getRawStatusCode() == HttpStatus.CONFLICT.value()) {
+                Map<String, Object> errorResponse = gson.fromJson(e.getResponseBodyAsString(), Map.class);
+                Map<String, List<String>> errors = (Map<String, List<String>>) errorResponse.get("error");
+                errors.remove("__type");
+                throw new NewDatasetCreateException(errors);
+            } else {
+                e.printStackTrace();
                 throw new RuntimeException("Unexpected error!");
             }
         }

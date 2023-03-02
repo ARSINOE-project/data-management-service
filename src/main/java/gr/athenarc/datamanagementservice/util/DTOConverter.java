@@ -95,8 +95,31 @@ public class DTOConverter {
         ndc.setPublicationDate(nd.getPublicationDate());
         ndc.setTags(nd.getTags().stream().map(tag -> new NewDatasetTagCkan(tag)).collect(Collectors.toList()));
 
-        System.out.println(ndc);
-
         return ndc;
+    }
+
+    public static UpdateDatasetCkan convert(UpdateDataset ud) {
+        UpdateDatasetCkan udc = new UpdateDatasetCkan();
+        udc.setId(ud.getId());
+        udc.setCaseStudy(ud.getCaseStudy());
+        udc.setAuthor(ud.getAuthor());
+        udc.setAuthorEmail(ud.getAuthorEmail());
+        udc.setMaintainer(ud.getMaintainer());
+        udc.setMaintainerEmail(ud.getMaintainerEmail());
+        udc.setNotes(ud.getDescription());
+        udc.setDoi(ud.getDoi());
+        udc.setDatasetType(ud.getDatasetType());
+        udc.setOrigin(ud.getOrigin());
+        udc.setResourceType(ud.getResourceType());
+        udc.setPrivate(ud.isPrivate());
+        udc.setTitle(ud.getTitle());
+        udc.setName(ud.getName());
+        udc.setLicenseId(ud.getLicenseId());
+        udc.setPublicationDate(ud.getPublicationDate());
+        if(ud.getTags() != null) {
+            udc.setTags(ud.getTags().stream().map(tag -> new NewDatasetTagCkan(tag)).collect(Collectors.toList()));
+        }
+
+        return udc;
     }
 }
