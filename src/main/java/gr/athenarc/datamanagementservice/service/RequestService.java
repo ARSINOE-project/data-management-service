@@ -424,10 +424,8 @@ public class RequestService {
                 Map<String, Object> errors = (Map<String, Object>) errorResponse.get("error");
                 errors.remove("__type");
                 throw new NewDatasetCreateException(errors);
-            } else {
-                e.printStackTrace();
-                throw new RuntimeException("Unexpected error!");
             }
+            throw e;
         }
     }
 }
