@@ -7,14 +7,14 @@ import java.util.Map;
 
 public class NewDatasetCreateException extends RuntimeException {
 
-    private Map<String, List<String>> errors;
+    private Map<String, Object> errors;
 
-    public NewDatasetCreateException(Map<String, List<String>> errors) {
+    public NewDatasetCreateException(Map<String, Object> errors) {
         this.errors = errors;
 
     }
 
-    public Map<String, List<String>> getErrors() {
+    public Map<String, Object> getErrors() {
         return errors;
     }
 }

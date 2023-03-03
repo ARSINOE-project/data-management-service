@@ -40,7 +40,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(NewDatasetCreateException.class)
-    public ResponseEntity<Map<String, List<String>>> handleNewDatasetCreateException(NewDatasetCreateException e, WebRequest request) {
+    public ResponseEntity<Map<String, Object>> handleNewDatasetCreateException(NewDatasetCreateException e, WebRequest request) {
         log.info("NewDatasetCreateException occurred");
         return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
     }

@@ -1,13 +1,11 @@
 package gr.athenarc.datamanagementservice.controller;
 
 import gr.athenarc.datamanagementservice.dto.*;
+import gr.athenarc.datamanagementservice.dto.ckan.CreateUpdatePatchNoNullsDatasetCkan;
 import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,13 +74,18 @@ public class HandleRequestController {
     }
 
     @PostMapping("/create-dataset")
-    public ResponseEntity<Dataset> createDataset(@RequestBody NewDataset newDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.upsertDataset(newDataset, null, request.getHeader(HttpHeaders.AUTHORIZATION), false), HttpStatus.CREATED);
+    public ResponseEntity<Dataset> createDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.POST), HttpStatus.CREATED);
     }
 
     @PutMapping("/update-dataset")
-    public ResponseEntity<Dataset> updateDataset(@RequestBody UpdateDataset updateDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.upsertDataset(null, updateDataset, request.getHeader(HttpHeaders.AUTHORIZATION), true), HttpStatus.CREATED);
+    public ResponseEntity<Dataset> updateDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.PUT), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/patch-dataset")
+    public ResponseEntity<Dataset> patchDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
+        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.PATCH), HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/create-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

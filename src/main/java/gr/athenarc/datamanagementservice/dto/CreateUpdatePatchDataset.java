@@ -1,12 +1,19 @@
 package gr.athenarc.datamanagementservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class NewDataset {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CreateUpdatePatchDataset {
+
+    // The id field will only be used in case of a patch request
+    // Otherwise it must be null and will not be serialized when sending
+    // the request to the server
+    private String id;
 
     private String title;
 

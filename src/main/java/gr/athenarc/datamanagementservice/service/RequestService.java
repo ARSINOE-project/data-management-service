@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,6 +70,9 @@ public class RequestService {
 
     @Value("${app.ckan-update-dataset}")
     private String updateDatasetUri;
+
+    @Value("${app.ckan-patch-dataset}")
+    private String patchDatasetUri;
 
     @Value("${app.ckan-create-resource}")
     private String createResourceUri;
@@ -317,34 +318,38 @@ public class RequestService {
         return response.getBody().getResult();
     }
 
-    public Dataset upsertDataset(NewDataset newDataset, UpdateDataset updateDataset, String auth, boolean update) {
+    public Dataset upsertDataset(CreateUpdatePatchDataset createUpdatePatchDataset, String auth, HttpMethod httpMethod) {
+
+        if(httpMethod.equals(HttpMethod.POST)) {
+            // Ignore the id in case it was sent when creating
+            createUpdatePatchDataset.setId(null);
+        }
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, auth);
 
         // Build URL
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + (update ? updateDatasetUri : createDatasetUri)).encode().toUriString();
+        String uri;
+        if(httpMethod.equals(HttpMethod.POST)) uri = createDatasetUri;
+        else if(httpMethod.equals(HttpMethod.PUT)) uri = updateDatasetUri;
+        else if(httpMethod.equals(HttpMethod.PATCH)) uri = patchDatasetUri;
+        else throw new RuntimeException("httpMethod: Was expecting one of: POST, PUT, PATCH");
 
-        NewDatasetCkan ndc = new NewDatasetCkan();
-        UpdateDatasetCkan udc = new UpdateDatasetCkan();
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + uri).encode().toUriString();
 
-        if(update) {
-            udc = DTOConverter.convert(updateDataset);
-        }
-        else {
-            ndc = DTOConverter.convert(newDataset);
-        }
+        CreateUpdatePatchDatasetCkan createUpdatePatchDatasetCkan = DTOConverter.convert(createUpdatePatchDataset, httpMethod.equals(HttpMethod.PATCH));
 
         // API call
         ResponseEntity<DatasetInfoResultCkan> response;
         try {
-            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(update ? udc : ndc, headers), DatasetInfoResultCkan.class);
+            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(createUpdatePatchDatasetCkan, headers), DatasetInfoResultCkan.class);
             return DTOConverter.convert(response.getBody().getResult());
         } catch (RestClientResponseException e) {
-            if (e.getRawStatusCode() == HttpStatus.CONFLICT.value()) {
+            System.out.println(e.getRawStatusCode());
+            if (e.getRawStatusCode() == HttpStatus.CONFLICT.value() || e.getRawStatusCode() == HttpStatus.BAD_REQUEST.value()) {
                 Map<String, Object> errorResponse = gson.fromJson(e.getResponseBodyAsString(), Map.class);
-                Map<String, List<String>> errors = (Map<String, List<String>>) errorResponse.get("error");
+                Map<String, Object> errors = (Map<String, Object>) errorResponse.get("error");
                 errors.remove("__type");
                 throw new NewDatasetCreateException(errors);
             }
@@ -395,7 +400,7 @@ public class RequestService {
         catch (RestClientResponseException e) {
             if (e.getRawStatusCode() == HttpStatus.CONFLICT.value()) {
                 Map<String, Object> errorResponse = gson.fromJson(e.getResponseBodyAsString(), Map.class);
-                Map<String, List<String>> errors = (Map<String, List<String>>) errorResponse.get("error");
+                Map<String, Object> errors = (Map<String, Object>) errorResponse.get("error");
                 errors.remove("__type");
                 throw new NewDatasetCreateException(errors);
             } else {
