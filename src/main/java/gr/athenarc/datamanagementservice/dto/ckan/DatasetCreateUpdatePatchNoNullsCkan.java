@@ -4,5 +4,5 @@ package gr.athenarc.datamanagementservice.dto.ckan;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateUpdatePatchNoNullsDatasetCkan extends CreateUpdatePatchDatasetCkan {
+public class DatasetCreateUpdatePatchNoNullsCkan extends DatasetCreateUpdatePatchCkan {
 }

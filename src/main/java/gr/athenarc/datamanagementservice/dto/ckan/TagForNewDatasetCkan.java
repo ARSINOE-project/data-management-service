@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class NewDatasetTagCkan {
+public class TagForNewDatasetCkan {
 
     private String name;
 }

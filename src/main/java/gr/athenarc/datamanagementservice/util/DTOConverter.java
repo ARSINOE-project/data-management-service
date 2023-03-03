@@ -46,7 +46,7 @@ public class DTOConverter {
         d.setOrigin(dc.getOrigin());
         d.setDatasetType(dc.getDatasetType());
         d.setResources(dc.getResources().stream().map(DTOConverter::convert).collect(Collectors.toList()));
-        d.setTags(dc.getTags().stream().map(tagCkan -> tagCkan.getName()).collect(Collectors.toList()));
+        d.setTags(dc.getTags().stream().map(TagCkan::getName).collect(Collectors.toList()));
         return d;
     }
 
@@ -76,10 +76,10 @@ public class DTOConverter {
         return g;
     }
 
-    public static CreateUpdatePatchDatasetCkan convert(CreateUpdatePatchDataset nd, boolean noNulls) {
-        CreateUpdatePatchDatasetCkan ndc;
-        if(noNulls) ndc = new CreateUpdatePatchNoNullsDatasetCkan();
-        else ndc = new CreateUpdatePatchDatasetCkan();
+    public static DatasetCreateUpdatePatchCkan convert(DatasetCreateUpdatePatch nd, boolean noNulls) {
+        DatasetCreateUpdatePatchCkan ndc;
+        if(noNulls) ndc = new DatasetCreateUpdatePatchNoNullsCkan();
+        else ndc = new DatasetCreateUpdatePatchCkan();
         ndc.setId(nd.getId());
         ndc.setCaseStudy(nd.getCaseStudy());
         ndc.setAuthor(nd.getAuthor());
@@ -97,7 +97,7 @@ public class DTOConverter {
         ndc.setLicenseId(nd.getLicenseId());
         ndc.setPublicationDate(nd.getPublicationDate());
         if(nd.getTags() != null) {
-            ndc.setTags(nd.getTags().stream().map(tag -> new NewDatasetTagCkan(tag)).collect(Collectors.toList()));
+            ndc.setTags(nd.getTags().stream().map(TagForNewDatasetCkan::new).collect(Collectors.toList()));
         }
 
         return ndc;

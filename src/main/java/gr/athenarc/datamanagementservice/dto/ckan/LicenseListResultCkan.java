@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ListLicensesResultCkan {
+public class LicenseListResultCkan {
 
     private String help;
 

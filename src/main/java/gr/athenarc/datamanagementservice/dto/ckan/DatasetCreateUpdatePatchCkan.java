@@ -1,25 +1,20 @@
-package gr.athenarc.datamanagementservice.dto;
+package gr.athenarc.datamanagementservice.dto.ckan;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateUpdatePatchDataset {
+public class DatasetCreateUpdatePatchCkan {
 
-    // The id field will only be used in case of a patch request
-    // Otherwise it must be null and will not be serialized when sending
-    // the request to the server
     private String id;
 
     private String title;
 
     private String name;
 
-    private String description;
+    private String notes;
 
     @JsonProperty("license_id")
     private String licenseId;
@@ -44,12 +39,12 @@ public class CreateUpdatePatchDataset {
     @JsonProperty("resource_type")
     private String resourceType;
 
-    @JsonProperty("dataset_type")
+    @JsonProperty("dataset_type_arsinoe")
     private String datasetType;
 
-    private List<String> tags;
+    private List<TagForNewDatasetCkan> tags;
 
-    @JsonProperty("case_study_id")
+    @JsonProperty("owner_org")
     private String caseStudy;
 
     @JsonProperty("private")

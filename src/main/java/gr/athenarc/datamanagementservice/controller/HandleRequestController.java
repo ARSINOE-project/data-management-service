@@ -1,7 +1,6 @@
 package gr.athenarc.datamanagementservice.controller;
 
 import gr.athenarc.datamanagementservice.dto.*;
-import gr.athenarc.datamanagementservice.dto.ckan.CreateUpdatePatchNoNullsDatasetCkan;
 import gr.athenarc.datamanagementservice.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -22,31 +20,39 @@ public class HandleRequestController {
     private RequestService requestService;
 
     @GetMapping("/list-case-studies")
-    public ResponseEntity<List<CaseStudy>> listCaseStudies(HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listCaseStudies(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<List<CaseStudy>> listCaseStudies(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listCaseStudies(auth), HttpStatus.OK);
     }
 
     @GetMapping("/list-datasets")
     public ResponseEntity<List<Dataset>> listDatasets(
             @RequestParam(name = "case_study_id", required = false) String caseStudyId,
             @RequestParam(name = "page", defaultValue = "0") int page,
-            HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, auth), HttpStatus.OK);
     }
 
     @GetMapping("/dataset-info")
-    public ResponseEntity<Dataset> datasetInfo(@RequestParam("dataset_id") String datasetId, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.getDatasetInfo(datasetId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<Dataset> datasetInfo(
+            @RequestParam("dataset_id") String datasetId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.getDatasetInfo(datasetId, auth), HttpStatus.OK);
     }
 
     @GetMapping("/resource-info")
-    public ResponseEntity<Resource> resourceInfo(@RequestParam("resource_id") String resourceId, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.getResourceInfo(resourceId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<Resource> resourceInfo(
+            @RequestParam("resource_id") String resourceId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.getResourceInfo(resourceId, auth), HttpStatus.OK);
     }
 
     @GetMapping("/download-resource")
-    public ResponseEntity<Void> downloadResource(@RequestParam("resource_id") String resourceId, HttpServletRequest request) {
-        Resource r = requestService.getResourceInfo(resourceId, request.getHeader(HttpHeaders.AUTHORIZATION));
+    public ResponseEntity<Void> downloadResource(
+            @RequestParam("resource_id") String resourceId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        Resource r = requestService.getResourceInfo(resourceId, auth);
 
         return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
                 .location(URI.create(r.getUrl()))
@@ -54,42 +60,59 @@ public class HandleRequestController {
     }
 
     @GetMapping("/list-groups")
-    public ResponseEntity<List<Group>> listGroups(HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listGroups(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<List<Group>> listGroups(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listGroups(auth), HttpStatus.OK);
     }
 
     @GetMapping("/group-info")
-    public ResponseEntity<Group> groupInfo(@RequestParam("group_id") String groupId, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.getGroupInfo(groupId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<Group> groupInfo(
+            @RequestParam("group_id") String groupId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.getGroupInfo(groupId, auth), HttpStatus.OK);
     }
 
     @GetMapping("/list-datasets-per-group")
-    public ResponseEntity<List<Dataset>> listDatasetsPerGroup(@RequestParam("group_id") String groupId, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listDatasetsPerGroup(groupId, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<List<Dataset>> listDatasetsPerGroup(
+            @RequestParam("group_id") String groupId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.listDatasetsPerGroup(groupId, auth), HttpStatus.OK);
     }
 
     @GetMapping("/list-licenses")
-    public ResponseEntity<List<License>> listLicenses(HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.listLicenses(request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+    public ResponseEntity<List<License>> listLicenses(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listLicenses(auth), HttpStatus.OK);
     }
 
     @PostMapping("/create-dataset")
-    public ResponseEntity<Dataset> createDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.POST), HttpStatus.CREATED);
+    public ResponseEntity<Dataset> createDataset(
+            @RequestBody DatasetCreateUpdatePatch datasetCreateUpdatePatch,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.upsertDataset(datasetCreateUpdatePatch, auth, HttpMethod.POST), HttpStatus.CREATED);
     }
 
     @PutMapping("/update-dataset")
-    public ResponseEntity<Dataset> updateDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.PUT), HttpStatus.CREATED);
+    public ResponseEntity<Dataset> updateDataset(
+            @RequestBody DatasetCreateUpdatePatch datasetCreateUpdatePatch,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.upsertDataset(datasetCreateUpdatePatch, auth, HttpMethod.PUT), HttpStatus.CREATED);
     }
 
     @PatchMapping("/patch-dataset")
-    public ResponseEntity<Dataset> patchDataset(@RequestBody CreateUpdatePatchDataset createUpdatePatchDataset, HttpServletRequest request) {
-        return new ResponseEntity<>(requestService.upsertDataset(createUpdatePatchDataset, request.getHeader(HttpHeaders.AUTHORIZATION), HttpMethod.PATCH), HttpStatus.CREATED);
+    public ResponseEntity<Dataset> patchDataset(
+            @RequestBody DatasetCreateUpdatePatch datasetCreateUpdatePatch,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        return new ResponseEntity<>(requestService.upsertDataset(datasetCreateUpdatePatch, auth, HttpMethod.PATCH), HttpStatus.CREATED);
     }
 
     @PostMapping(path = "/create-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Resource> createResource(@RequestParam("resource") NewResource newResource, @RequestParam(value = "file", required = false) MultipartFile document, HttpServletRequest request) throws IOException {
+    public ResponseEntity<Resource> createResource(
+            @RequestParam("resource") NewResource newResource,
+            @RequestParam(value = "file", required = false) MultipartFile document,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
         boolean hasUrl = newResource.getUrl() != null;
         boolean hasFile = document != null;
 
@@ -98,6 +121,27 @@ public class HandleRequestController {
             return ResponseEntity.badRequest().build();
         }
 
-        return new ResponseEntity<>(requestService.createResource(newResource, document, request.getHeader(HttpHeaders.AUTHORIZATION)), HttpStatus.OK);
+        byte[] fileBytes = null;
+        String fileName = null;
+        if(hasFile) {
+            try {
+                fileBytes = document.getBytes();
+                fileName = document.getOriginalFilename();
+            }
+            catch(IOException e) {
+                return ResponseEntity.badRequest().build();
+            }
+
+        }
+
+        return new ResponseEntity<>(requestService.createResource(newResource, fileBytes, fileName, auth), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-dataset")
+    public ResponseEntity<Void> deleteDataset(
+            @RequestParam("dataset_id") String datasetId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        requestService.deleteDataset(datasetId, auth);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
