@@ -143,7 +143,7 @@ public class HandleRequestController {
 
         }
 
-        return new ResponseEntity<>(requestService.upsertResource(resourceCreateUpdatePatch, fileBytes, fileName, auth, HttpMethod.POST), HttpStatus.OK);
+        return new ResponseEntity<>(requestService.upsertResource(resourceCreateUpdatePatch, fileBytes, fileName, auth, HttpMethod.POST), HttpStatus.CREATED);
     }
 
     @PutMapping(path = "/update-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
