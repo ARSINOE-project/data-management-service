@@ -108,12 +108,21 @@ public class HandleRequestController {
         return new ResponseEntity<>(requestService.upsertDataset(datasetCreateUpdatePatch, auth, HttpMethod.PATCH), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete-dataset")
+    public ResponseEntity<Void> deleteDataset(
+            @RequestParam("dataset_id") String datasetId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        requestService.deleteDataset(datasetId, auth);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping(path = "/create-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Resource> createResource(
-            @RequestParam("resource") NewResource newResource,
+            @RequestParam("resource") ResourceCreateUpdatePatch resourceCreateUpdatePatch,
             @RequestParam(value = "file", required = false) MultipartFile document,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
-        boolean hasUrl = newResource.getUrl() != null;
+        System.out.println("HELLO!");
+        boolean hasUrl = resourceCreateUpdatePatch.getUrl() != null;
         boolean hasFile = document != null;
 
         // Must provide exactly one of [newResource.url, document]
@@ -134,14 +143,74 @@ public class HandleRequestController {
 
         }
 
-        return new ResponseEntity<>(requestService.createResource(newResource, fileBytes, fileName, auth), HttpStatus.OK);
+        return new ResponseEntity<>(requestService.upsertResource(resourceCreateUpdatePatch, fileBytes, fileName, auth, HttpMethod.POST), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete-dataset")
-    public ResponseEntity<Void> deleteDataset(
-            @RequestParam("dataset_id") String datasetId,
+    @PutMapping(path = "/update-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Resource> updateResource(
+            @RequestParam("resource") ResourceCreateUpdatePatch resourceCreateUpdatePatch,
+            @RequestParam(value = "file", required = false) MultipartFile document,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
-        requestService.deleteDataset(datasetId, auth);
+        boolean hasUrl = resourceCreateUpdatePatch.getUrl() != null;
+        boolean hasFile = document != null;
+
+        // Must provide exactly one of [newResource.url, document]
+        if((hasUrl && hasFile) || (!hasUrl && !hasFile)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        byte[] fileBytes = null;
+        String fileName = null;
+        if(hasFile) {
+            try {
+                fileBytes = document.getBytes();
+                fileName = document.getOriginalFilename();
+            }
+            catch(IOException e) {
+                return ResponseEntity.badRequest().build();
+            }
+
+        }
+
+        return new ResponseEntity<>(requestService.upsertResource(resourceCreateUpdatePatch, fileBytes, fileName, auth, HttpMethod.PUT), HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "/patch-resource", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Resource> patchResource(
+            @RequestParam("resource") ResourceCreateUpdatePatch resourceCreateUpdatePatch,
+            @RequestParam(value = "file", required = false) MultipartFile document,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+
+        boolean hasUrl = resourceCreateUpdatePatch.getUrl() != null;
+        boolean hasFile = document != null;
+
+        // Must provide exactly one of [newResource.url, document] only if at least one was provided!, not the same case as create/update
+        // Because in patch both could be omitted!
+        if((hasUrl && hasFile)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        byte[] fileBytes = null;
+        String fileName = null;
+        if(hasFile) {
+            try {
+                fileBytes = document.getBytes();
+                fileName = document.getOriginalFilename();
+            }
+            catch(IOException e) {
+                return ResponseEntity.badRequest().build();
+            }
+
+        }
+
+        return new ResponseEntity<>(requestService.upsertResource(resourceCreateUpdatePatch, fileBytes, fileName, auth, HttpMethod.PATCH), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete-resource")
+    public ResponseEntity<Void> deleteResource(
+            @RequestParam("resource_id") String resourceId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        requestService.deleteResource(resourceId, auth);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -78,6 +78,15 @@ public class RequestService {
     @Value("${app.ckan-create-resource}")
     private String createResourceUri;
 
+    @Value("${app.ckan-update-resource}")
+    private String updateResourceUri;
+
+    @Value("${app.ckan-patch-resource}")
+    private String patchResourceUri;
+
+    @Value("${app.ckan-delete-resource}")
+    private String deleteResourceUri;
+
     public List<CaseStudy> listCaseStudies(String auth) {
 
         // Headers
@@ -359,6 +368,7 @@ public class RequestService {
     }
 
     public void deleteDataset(String datasetId, String auth) {
+
         // Headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, auth);
@@ -381,7 +391,12 @@ public class RequestService {
         }
     }
 
-    public Resource createResource(NewResource newResource, byte[] fileBytes, String fileName, String auth) {
+    public Resource upsertResource(ResourceCreateUpdatePatch resourceCreateUpdatePatch, byte[] fileBytes, String fileName, String auth, HttpMethod httpMethod) {
+
+        if(httpMethod.equals(HttpMethod.POST)) {
+            // Ignore the id in case it was sent when creating
+            resourceCreateUpdatePatch.setId(null);
+        }
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
@@ -404,13 +419,18 @@ public class RequestService {
             body.add("upload", fileEntity);
         }
 
-        Map<String, String> newResourceMap = newResource.toMap();
-        for(Map.Entry<String, String> entry: newResourceMap.entrySet()) {
+        Map<String, String> resourceMap = resourceCreateUpdatePatch.toMap(!httpMethod.equals(HttpMethod.PATCH));
+        for(Map.Entry<String, String> entry: resourceMap.entrySet()) {
             body.add(entry.getKey(), entry.getValue());
         }
 
         // Build URL
-        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + createResourceUri).encode().toUriString();
+        String uri;
+        if(httpMethod.equals(HttpMethod.POST)) uri = createResourceUri;
+        else if(httpMethod.equals(HttpMethod.PUT)) uri = updateResourceUri;
+        else if(httpMethod.equals(HttpMethod.PATCH)) uri = patchResourceUri;
+        else throw new RuntimeException("httpMethod: Was expecting one of: POST, PUT, PATCH");
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + uri).encode().toUriString();
 
         // API call
         ResponseEntity<ResourceInfoResultCkan> response;
@@ -424,6 +444,30 @@ public class RequestService {
                 Map<String, Object> errors = (Map<String, Object>) errorResponse.get("error");
                 errors.remove("__type");
                 throw new NewDatasetCreateException(errors);
+            }
+            throw e;
+        }
+    }
+
+    public void deleteResource(String resourceId, String auth) {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + deleteResourceUri)
+                .encode()
+                .toUriString();
+
+        // API call
+        ResponseEntity<ResourceDeleteResultCkan> response;
+        try {
+            response = restTemplate.exchange(urlTemplate, HttpMethod.POST, new HttpEntity<>(new ResourceDeleteCkan(resourceId), headers), ResourceDeleteResultCkan.class);
+        }
+        catch(RestClientResponseException e) {
+            if(e.getRawStatusCode() == HttpStatus.NOT_FOUND.value()) {
+                throw new ResourceNotFoundException(resourceId);
             }
             throw e;
         }

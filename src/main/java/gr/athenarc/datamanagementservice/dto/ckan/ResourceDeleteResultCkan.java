@@ -3,7 +3,7 @@ package gr.athenarc.datamanagementservice.dto.ckan;
 import lombok.Data;
 
 @Data
-public class DatasetDeleteResultCkan {
+public class ResourceDeleteResultCkan {
 
     private String help;
 
