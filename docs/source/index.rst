@@ -397,7 +397,10 @@ Create Dataset
    
    :requestheader Authorization: `API token`
    :<json string title: The title of the dataset
-   :<json string name: The name of the dataset (This will be used to create the url of the dataset within the catalogue. Use all lowercase letters and hyphens instead of spaces)
+   :<json string name: The name of the dataset 
+      (This will be used to create the url of the dataset
+      within the catalogue. Use all lowercase letters and
+      hyphens instead of spaces)
    :<json string description: The description of the dataset (optional)
    :<json string license_id: The id of the license. See /list-licenses for available values (optional)
    :<json string publication_date: The publication date of the dataset (optional)
