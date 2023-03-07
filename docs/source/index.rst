@@ -27,7 +27,7 @@ List Case Studies
    
    Retrieves a list of the case studies in the Data Catalogue.
    
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
 **Example Request**
 
@@ -214,7 +214,7 @@ List Groups
 
    Retrieves a list of the groups in the Data Catalogue.
 
-   :requestheader Authorization: optional `API token`
+   :requestheader Authorization: `API token` (*optional*)
 
 **Example Request**
 
@@ -386,3 +386,44 @@ List Datasets per Group
          "dataset_type": null
       },
    ]
+
+===========
+Create Dataset
+===========
+
+.. http:post:: /create-dataset
+   
+   Creates a new dataset in the Data Catalogue. (A dataset is a collection of resources)
+   
+   :requestheader Authorization: `API token`
+   :<json string title: The title of the dataset
+   :<json string name: The name of the dataset (This will be used to create the url of the dataset within the catalogue. Use all lowercase letters and hyphens instead of spaces)
+   :<json string description: The description of the dataset
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+    curl --request POST ' {serviceBaseURL}/create-dataset' --header 'Authorization: token' --header "Content-Type: application/json" --data @body.json
+
+**Example Body**
+
+.. sourcecode:: json
+
+   {
+      "title": "Dataset title",
+      "name": "a-new-dataset",
+      "author": "John D. Author",
+      "dataset_type": "textual",
+      "license_id": "cc-by",
+      "description": "Description of the new dataset",
+      "origin": "primary",
+      "case_study_id": "uuid-of-case-study",
+      "resource_type": "software",
+      "tags": ["tag1", "tag2", "tag3"],
+      "publication_date": "2023/02/28"
+   }
+
+**Example Response**
+
+Returns the newly created dataset in the same format as *Dataset Info*
