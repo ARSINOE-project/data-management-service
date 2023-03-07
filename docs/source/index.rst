@@ -398,7 +398,20 @@ Create Dataset
    :requestheader Authorization: `API token`
    :<json string title: The title of the dataset
    :<json string name: The name of the dataset (This will be used to create the url of the dataset within the catalogue. Use all lowercase letters and hyphens instead of spaces)
-   :<json string description: The description of the dataset
+   :<json string description: The description of the dataset (optional)
+   :<json string license_id: The id of the license. See /list-licenses for available values (optional)
+   :<json string publication_date: The publication date of the dataset (optional)
+   :<json string author: The name of the dataset's author
+   :<json string author_email: The author's email (optional)
+   :<json string maintainer: The name of the dataset's maintainer (optional)
+   :<json string maintainer_email: The email of the dataset's maintainer (optional)
+   :<json string doi: The DOI of the dataset (optional)
+   :<json string origin: The origin of the dataset. Can be one of: unknown, primary, secondary
+   :<json string resource_type: The resource type of the dataset. Can be one of: model, software, sensor, observational, report, images, formulas, statistical
+   :<json string dataset_type: The type of the dataset. Can be one of: textual, geospatial, satellite_images, tabular, video, scripts
+   :<json string array tags: The tags of the dataset. An array of strings.
+
+
 
 **Example Request**
 
@@ -424,6 +437,6 @@ Create Dataset
       "publication_date": "2023/02/28"
    }
 
-**Example Response**
+**Response**
 
 Returns the newly created dataset in the same format as *Dataset Info*
