@@ -597,8 +597,8 @@ Create Resource
    Creates a new dataset in the Data Catalogue. (A dataset is a collection of resources)
    
    :requestheader Authorization: `API token`
-   :formparam file file: The resource file. (optional)
-   :formparam string resource: A json string containing the rest of the fields listed below:
+   :formparam file: The resource file. (optional)
+   :formparam resource: A json string containing the rest of the fields listed below:
    :<json string dataset_id: The id of the owning dataset. (Inside resource json)
    :<json string url: The url to an external resource. This must be provided only if a file upload is not provided. (optional) (Inside resource json)
    :<json string description: The description of the resource. (optional) (Inside resource json)
