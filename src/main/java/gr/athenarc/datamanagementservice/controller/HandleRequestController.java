@@ -121,7 +121,6 @@ public class HandleRequestController {
             @RequestParam("resource") ResourceCreateUpdatePatch resourceCreateUpdatePatch,
             @RequestParam(value = "file", required = false) MultipartFile document,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
-        System.out.println("HELLO!");
         boolean hasUrl = resourceCreateUpdatePatch.getUrl() != null;
         boolean hasFile = document != null;
 

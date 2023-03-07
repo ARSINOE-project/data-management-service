@@ -388,6 +388,108 @@ List Datasets per Group
    ]
 
 ===========
+List Licenses
+===========
+
+.. http:get:: /list-licenses
+   
+   Retrieves a list of all of the available licenses in the catalogue. At the time of this documentation being written, including an authorization token does not make a difference on the results.
+
+**Example Request**
+
+.. sourcecode:: bash
+
+   curl --request GET '{serviceBaseURL}/list-licenses --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      {
+         "id": "notspecified",
+         "family": "",
+         "maintainer": "",
+         "status": "active",
+         "url": "",
+         "title": "License not specified",
+         "domain_content": "False",
+         "domain_data": "False",
+         "domain_software": "False",
+         "is_generic": "True",
+         "od_conformance": "not reviewed",
+         "osd_conformance": "not reviewed",
+         "is_okd_compliant": false,
+         "is_osi_compliant": false
+      },
+      {
+         "id": "odc-pddl",
+         "family": "",
+         "maintainer": "",
+         "status": "active",
+         "url": "http://www.opendefinition.org/licenses/odc-pddl",
+         "title": "Open Data Commons Public Domain Dedication and License (PDDL)",
+         "domain_content": "False",
+         "domain_data": "True",
+         "domain_software": "False",
+         "is_generic": "False",
+         "od_conformance": "approved",
+         "osd_conformance": "not reviewed",
+         "is_okd_compliant": true,
+         "is_osi_compliant": false
+      },
+      {
+         "id": "odc-odbl",
+         "family": "",
+         "maintainer": "",
+         "status": "active",
+         "url": "http://www.opendefinition.org/licenses/odc-odbl",
+         "title": "Open Data Commons Open Database License (ODbL)",
+         "domain_content": "False",
+         "domain_data": "True",
+         "domain_software": "False",
+         "is_generic": "False",
+         "od_conformance": "approved",
+         "osd_conformance": "not reviewed",
+         "is_okd_compliant": true,
+         "is_osi_compliant": false
+      },
+      {
+         "id": "odc-by",
+         "family": "",
+         "maintainer": "",
+         "status": "active",
+         "url": "http://www.opendefinition.org/licenses/odc-by",
+         "title": "Open Data Commons Attribution License",
+         "domain_content": "False",
+         "domain_data": "True",
+         "domain_software": "False",
+         "is_generic": "False",
+         "od_conformance": "approved",
+         "osd_conformance": "not reviewed",
+         "is_okd_compliant": true,
+         "is_osi_compliant": false
+      },
+      {
+         "id": "cc-zero",
+         "family": "",
+         "maintainer": "",
+         "status": "active",
+         "url": "http://www.opendefinition.org/licenses/cc-zero",
+         "title": "Creative Commons CCZero",
+         "domain_content": "True",
+         "domain_data": "True",
+         "domain_software": "False",
+         "is_generic": "False",
+         "od_conformance": "approved",
+         "osd_conformance": "not reviewed",
+         "is_okd_compliant": true,
+         "is_osi_compliant": false
+      }
+   ]
+
+
+===========
 Create Dataset
 ===========
 
@@ -396,24 +498,22 @@ Create Dataset
    Creates a new dataset in the Data Catalogue. (A dataset is a collection of resources)
    
    :requestheader Authorization: `API token`
-   :<json string title: The title of the dataset
-   :<json string name: The name of the dataset 
-      (This will be used to create the url of the dataset
-      within the catalogue. Use all lowercase letters and
-      hyphens instead of spaces)
-   :<json string description: The description of the dataset (optional)
-   :<json string license_id: The id of the license. See /list-licenses for available values (optional)
-   :<json string publication_date: The publication date of the dataset (optional)
-   :<json string author: The name of the dataset's author
-   :<json string author_email: The author's email (optional)
-   :<json string maintainer: The name of the dataset's maintainer (optional)
-   :<json string maintainer_email: The email of the dataset's maintainer (optional)
-   :<json string doi: The DOI of the dataset (optional)
+   :<json string title: The title of the dataset.
+   :<json string name: The name of the dataset (This will be used to create the url of the dataset within the catalogue. Use all lowercase letters and hyphens instead of spaces)
+   :<json string description: The description of the dataset. (optional)
+   :<json string license_id: The id of the license. See /list-licenses for available values. (optional)
+   :<json string publication_date: The publication date of the dataset. (optional)
+   :<json string author: The name of the dataset's author.
+   :<json string author_email: The author's email. (optional)
+   :<json string maintainer: The name of the dataset's maintainer. (optional)
+   :<json string maintainer_email: The email of the dataset's maintainer. (optional)
+   :<json string doi: The DOI of the dataset. (optional)
    :<json string origin: The origin of the dataset. Can be one of: unknown, primary, secondary
    :<json string resource_type: The resource type of the dataset. Can be one of: model, software, sensor, observational, report, images, formulas, statistical
    :<json string dataset_type: The type of the dataset. Can be one of: textual, geospatial, satellite_images, tabular, video, scripts
-   :<json string array tags: The tags of the dataset. An array of strings.
-
+   :<json string array tags: The tags of the dataset. An array of strings. (optional)
+   :<json string case_stuy_id: The id of the owner case study.
+   :<json boolean private: Whether or not this is going to be a private dataset. (optional, defaults to false) 
 
 
 **Example Request**
@@ -443,3 +543,132 @@ Create Dataset
 **Response**
 
 Returns the newly created dataset in the same format as *Dataset Info*
+
+===========
+Update Dataset
+===========
+
+.. http:put:: /update-dataset
+   
+   Updates an existing dataset. In addition to the fields found in /create-dataset, there must also be an id present referring to the id of the dataset being updated.
+
+   :statuscode 404: No dataset was found with the provided id.
+
+===========
+Patch Dataset
+===========
+
+.. http:patch:: /patch-dataset
+   
+   Patches an existing dataset. The difference with /update-dataset is that this method allows partial updates on the dataset. Only the provided fields will be
+   updated. Omitted or null fields will be ignored.
+
+   :statuscode 404: No dataset was found with the provided id.
+
+===========
+Delete Dataset
+===========
+
+.. http:delete:: /delete-dataset
+
+   Deletes the specified dataset.
+
+   :query string dataset_id: The id of the dataset.
+
+   :requestheader Authorization: `API token`
+
+   :statuscode 404: No dataset was found with the provided id.
+   
+   :statuscode 200: The dataset was deleted successfully.
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+   curl --request DELETE '{serviceBaseURL}/delete-dataset?dataset_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'
+
+
+===========
+Create Resource
+===========
+
+.. http:post:: /create-resource
+   
+   Creates a new dataset in the Data Catalogue. (A dataset is a collection of resources)
+   
+   :requestheader Authorization: `API token`
+   :formparam file file: The resource file. (optional)
+   :formparam string resource: A json string containing the rest of the fields listed below:
+   :formparam string dataset_id: The id of the owning dataset. (Inside resource json)
+   :formparam string url: The url to an external resource. This must be provided only if a file upload is not provided. (optional) (Inside resource json)
+   :formparam string description: The description of the resource. (optional) (Inside resource json)
+   :formparam string format: The format of the resource, e.g. csv, shp, html etc (optional) (Inside resource json)
+   :formparam string name: The name of the resource. (Inside resource json)
+     
+
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+    curl --request POST ' {serviceBaseURL}/create-resource' --header 'Authorization: token' \
+      --form 'file=@"path/to/file"' \
+      --form 'resource="{\"dataset_id\": \"eebc4b25-da99-43f8-8221-e12a13cd9da4\", \"name\": \"Resource 10\", \"description\": \"A description\", \"format\": \"csv\"}"'
+
+**Example Multipart form Data for "resource"**
+
+.. sourcecode:: json
+
+   {
+      "dataset_id": "eebc4b25-da99-43f8-8221-e12a13cd9da4",
+      "name": "Resource 10",
+      "description": "A description",
+      "format": "csv"
+   }
+
+**Response**
+
+Returns the newly created rsource in the same format as *Resource Info*
+
+===========
+Update Resource
+===========
+
+.. http:put:: /update-resource
+   
+   Updates an existing resource. If a resource was created with an external url, you may only change the external url. If it was created with a file upload, you may only change the file upload.
+
+   :statuscode 404: No resource was found with the provided id.
+
+
+===========
+Patch Resource
+===========
+
+.. http:patch:: /patch-resource
+   
+   Patches an existing resource. The difference with update is the same as in /update-dataset and /patch-dataset.
+
+   :statuscode 404: No resource was found with the provided id.
+
+===========
+Delete Resource
+===========
+
+.. http:delete:: /delete-resource
+
+   Deletes the specified dataset.
+
+   :query string resource_id: The id of the resource.
+
+   :requestheader Authorization: `API token`
+
+   :statuscode 404: No resource was found with the provided id.
+   
+   :statuscode 200: The resource was deleted successfully.
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+   curl --request DELETE '{serviceBaseURL}/delete-resource?resource_id=dea64b6b-5bf7-4698-bb88-d095be9c4ccb' --header 'Authorization: token'

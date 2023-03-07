@@ -18,6 +18,7 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -333,6 +334,14 @@ public class RequestService {
         if(httpMethod.equals(HttpMethod.POST)) {
             // Ignore the id in case it was sent when creating
             datasetCreateUpdatePatch.setId(null);
+            // Set null tags to empty array
+            if(datasetCreateUpdatePatch.getTags() == null) {
+                datasetCreateUpdatePatch.setTags(new ArrayList<>());
+            }
+        }
+        else {
+            // Make sure the dataset exists
+            Dataset dataset = getDatasetInfo(datasetCreateUpdatePatch.getId(), auth);
         }
 
         // Headers
@@ -369,6 +378,9 @@ public class RequestService {
 
     public void deleteDataset(String datasetId, String auth) {
 
+        // Make sure the dataset exists
+        Dataset dataset = getDatasetInfo(datasetId, auth);
+
         // Headers
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, auth);
@@ -396,6 +408,10 @@ public class RequestService {
         if(httpMethod.equals(HttpMethod.POST)) {
             // Ignore the id in case it was sent when creating
             resourceCreateUpdatePatch.setId(null);
+        }
+        else {
+            // Make sure the resource exists
+            Resource resource = getResourceInfo(resourceCreateUpdatePatch.getId(), auth);
         }
 
         // Headers
@@ -450,6 +466,9 @@ public class RequestService {
     }
 
     public void deleteResource(String resourceId, String auth) {
+
+        // Make sure the resource exists
+        Resource resource = getResourceInfo(resourceId, auth);
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
