@@ -628,7 +628,7 @@ Create Resource
 
 **Response**
 
-Returns the newly created rsource in the same format as *Resource Info*
+Returns the newly created resource in the same format as *Resource Info*
 
 ===========
 Update Resource
