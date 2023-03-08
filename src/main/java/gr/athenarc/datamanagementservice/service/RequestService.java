@@ -329,6 +329,26 @@ public class RequestService {
         return response.getBody().getResult();
     }
 
+    private final List<String> datasetOrigins =
+            List.of("unknown", "primary", "secondary");
+    public List<String> listDatasetOrigins() {
+        return datasetOrigins;
+    }
+
+    private final List<String> datasetResourceTypes =
+            List.of("model", "software", "sensor", "observational", "report", "images", "formulas", "statistical");
+
+    public List<String> listDatasetResourceTypes() {
+        return datasetResourceTypes;
+    }
+
+    private final List<String> datasetTypes =
+            List.of("textual", "geospatial", "satellite_images", "tabular", "video", "scripts");
+
+    public List<String> listDatasetTypes() {
+        return datasetTypes;
+    }
+
     public Dataset upsertDataset(DatasetCreateUpdatePatch datasetCreateUpdatePatch, String auth, HttpMethod httpMethod) {
 
         if(httpMethod.equals(HttpMethod.POST)) {

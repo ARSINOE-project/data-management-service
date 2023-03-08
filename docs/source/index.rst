@@ -488,6 +488,86 @@ List Licenses
       }
    ]
 
+===========
+List Dataset Origins
+===========
+
+.. http:get:: /list-dataset-origins
+   
+   Retrieves a list of all of the available dataset origins that can be accepted when creating a dataset. At the time of this documentation being written, including an authorization token does not make a difference on the results.
+
+**Example Request**
+
+.. sourcecode:: bash
+
+   curl --request GET '{serviceBaseURL}/list-dataset-origins --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      "unknown",
+      "primary",
+      "secondary"
+   ]
+
+===========
+List Dataset Origins
+===========
+
+.. http:get:: /list-dataset-resource-types
+   
+   Retrieves a list of all of the available dataset resource types that can be accepted when creating a dataset. At the time of this documentation being written, including an authorization token does not make a difference on the results.
+
+**Example Request**
+
+.. sourcecode:: bash
+
+   curl --request GET '{serviceBaseURL}/list-dataset-resource-types --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      "model",
+      "software",
+      "sensor",
+      "observational",
+      "report",
+      "images",
+      "formulas",
+      "statistical"
+   ]
+
+===========
+List Dataset Types
+===========
+
+.. http:get:: /list-dataset-types
+   
+   Retrieves a list of all of the available dataset types that can be accepted when creating a dataset. At the time of this documentation being written, including an authorization token does not make a difference on the results.
+
+**Example Request**
+
+.. sourcecode:: bash
+
+   curl --request GET '{serviceBaseURL}/list-dataset-types --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      "textual",
+      "geospatial",
+      "satellite_images",
+      "tabular",
+      "video",
+      "scripts"
+   ]
+
 
 ===========
 Create Dataset

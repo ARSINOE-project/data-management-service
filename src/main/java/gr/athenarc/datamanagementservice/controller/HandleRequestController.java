@@ -87,6 +87,27 @@ public class HandleRequestController {
         return new ResponseEntity<>(requestService.listLicenses(auth), HttpStatus.OK);
     }
 
+    @GetMapping("/list-dataset-origins")
+    public ResponseEntity<List<String>> listDatasetOrigins(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listDatasetOrigins(), HttpStatus.OK);
+    }
+
+    @GetMapping("/list-dataset-resource-types")
+    public ResponseEntity<List<String>> listDatasetResourceTypes(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listDatasetResourceTypes(), HttpStatus.OK);
+    }
+
+    @GetMapping("/list-dataset-types")
+    public ResponseEntity<List<String>> listDatasetTypes(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth
+    ) {
+        return new ResponseEntity<>(requestService.listDatasetTypes(), HttpStatus.OK);
+    }
+
     @PostMapping("/create-dataset")
     public ResponseEntity<Dataset> createDataset(
             @RequestBody DatasetCreateUpdatePatch datasetCreateUpdatePatch,
