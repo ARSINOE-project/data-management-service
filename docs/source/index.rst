@@ -3,7 +3,7 @@ Documentation for the Arsinoe Data Management Service
 #############
 
 .. |catalogueBaseURL| replace:: https://catalogue.arsinoe-project.eu
-.. |serviceBaseURL| replace:: https://catalogue.arsinoe-project.eu
+.. |serviceBaseURL| replace:: https://catalogue.arsinoe-project.eu/data-management-service
 
 
 The Arsinoe Data Management Service provides endpoints to simplify the machine-to-machine interaction with the Arsinoe Data Catalogue.
