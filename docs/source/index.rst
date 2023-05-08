@@ -69,6 +69,8 @@ List Datasets
 
    :query string case_study_id: The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned. (*optional*)
 
+   :query int page: The page number. While discovering pages starting from zero and upwards, the first page that returns fewer than 100 results or no results is the last / next from last accordingly.
+
    :requestheader Authorization: `API token` (*optional*)
 
    :statuscode 404: The provided `case_study_id` does not match a case study in the Data Catalogue.
@@ -78,6 +80,83 @@ List Datasets
 .. sourcecode:: bash
   
    curl --request GET '{serviceBaseURL}/list-datasets' --header 'Authorization: token'
+
+**Example Response**
+
+.. sourcecode:: json
+
+   [
+      {
+         "id": "d551d2ff-0902-4576-a610-942e230faaa4",
+         "title": "Natura 2000",
+         "name": "natura-2000",
+         "description": "Natura 2000 datasets",
+         "author": "Eurostat",
+         "maintainer": "Eurostat",
+         "doi": "https://doi.org/10.1007/s10531-021-02125-7",
+         "origin": "primary",
+         "resources": [
+            {
+               "id": "dea64b6b-5bf7-4698-bb88-d095be9c4ccb",
+               "created": "2022-10-25T12:50:48.367494",
+               "description": "natura 2000 greece in shapefile format",
+               "format": "SHP",
+               "name": "natura-2000-greece",
+               "size": 5478508,
+               "url": "{catalogueBaseURL}/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
+               "last_modified": "2022-10-25T12:50:48.330817",
+               "resource_type": null
+            }
+         ],
+         "license_id": "other-at",
+         "license_title": "Other (Attribution)",
+         "license_url": null,
+         "private": true,
+         "case_study_id": "408463d1-b4a2-40a6-bca6-5b69ee3b26a2",
+         "number_of_resources": 1,
+         "publication_date": "2021-09-17",
+         "authorEmail": "",
+         "maintainer_email": "",
+         "resource_type": null,
+         "dataset_type": "geospatial"
+      },
+   ]
+
+===========
+Search Datasets
+===========
+
+.. http:get:: /search-datasets
+
+   Retrieves a list of the datasets in the Data Catalogue 
+
+   :query string operator: The operator that joins the filtered fields. Can either be "or" or "and". Defaults to "and". (*optional*)
+
+   :query string author: The author of the dataset. (*optional*)
+
+   :query string dataset_type: Check create dataset for available options.  (*optional*)
+
+   :query string origin: Check create dataset for available options. (*optional*)
+
+   :query string resource_type: Check create dataset for available options. (*optional*)
+
+   :query string id: The id of the dataset (*optional*)
+
+   :query string name: The name of the dataset (*optional*)
+
+   :query string case_study_name: The name of the case study. (*optional*)
+
+   :query string title: The title of the dataset (*optional*)
+
+   :query string tags: The tags of the dataset. This field can be provided multiple times. (*optional*)
+
+   :requestheader Authorization: `API token` (*optional*)
+
+**Example Request**
+
+.. sourcecode:: bash
+  
+   curl --request GET '{serviceBaseURL}/search-datasets?tags=tag1&tags=tag2&author=some_name&operator=and' --header 'Authorization: token'
 
 **Example Response**
 
