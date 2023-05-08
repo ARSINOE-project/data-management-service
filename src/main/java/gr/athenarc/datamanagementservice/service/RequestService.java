@@ -5,10 +5,12 @@ import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
 import gr.athenarc.datamanagementservice.exception.*;
 import gr.athenarc.datamanagementservice.util.DTOConverter;
+import gr.athenarc.datamanagementservice.util.FilterFields;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -45,6 +47,9 @@ public class RequestService {
 
     @Value("${app.ckan-list-datasets-uri}")
     private String listDatasetsUri;
+
+    @Value("${app.ckan-search-datasets-uri}")
+    private String searchDatasetsUri;
 
     @Value("${app.ckan-get-dataset-info-uri}")
     private String getDatasetInfoUri;
@@ -160,6 +165,28 @@ public class RequestService {
         }
 
         return response.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+    }
+
+    public List<Dataset> searchDatasets(String solrQuery, String auth) {
+
+        // Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, auth);
+
+        // Build URL
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + searchDatasetsUri)
+                .queryParam("q", "{q}")
+                .encode()
+                .toUriString();
+
+        // Create params map
+        Map<String, String> params = new HashMap<>();
+        params.put("q", solrQuery);
+
+        // API call
+        ResponseEntity<DatasetListResultCkan> r = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
+
+        return r.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
     }
 
     public Dataset getDatasetInfo(String datasetId, String auth) {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,5 +44,11 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleNewDatasetCreateException(NewDatasetCreateException e, WebRequest request) {
         log.info("NewDatasetCreateException occurred");
         return new ResponseEntity<>(e.getErrors(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalFilterKey.class)
+    public ResponseEntity<Map<String, String>> handleNewDatasetCreateException(IllegalFilterKey e, WebRequest request) {
+        log.info("IllegalFilterKey occurred");
+        return new ResponseEntity<>(Map.of("illegal_key", e.getKey()), HttpStatus.BAD_REQUEST);
     }
 }

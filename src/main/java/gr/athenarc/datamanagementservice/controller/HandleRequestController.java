@@ -2,15 +2,22 @@ package gr.athenarc.datamanagementservice.controller;
 
 import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.service.RequestService;
+import gr.athenarc.datamanagementservice.util.FilterFields;
+import gr.athenarc.datamanagementservice.util.SolrQueryTerm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -32,6 +39,34 @@ public class HandleRequestController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
         return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, auth), HttpStatus.OK);
+    }
+
+    @GetMapping("/search-datasets")
+    public ResponseEntity<List<Dataset>> searchDatasets(
+            @RequestParam MultiValueMap<String, String> params,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
+        MultiValueMap<String, String> paramsCopy = new LinkedMultiValueMap<>(params);
+        Operator operator;
+        if(paramsCopy.containsKey("operator")) {
+            if(paramsCopy.get("operator").size() != 1) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            try {
+                operator = Operator.valueOf(paramsCopy.get("operator").get(0));
+                paramsCopy.remove("operator");
+            }
+            catch(IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        }
+        else {
+            operator = Operator.and;
+        }
+        List<SolrQueryTerm> solrQueryTerms = FilterFields.prepareFilterFieldsMap(paramsCopy);
+        String solrQuery = FilterFields.generateSolrQuery(solrQueryTerms, operator);
+        System.out.println(solrQuery);
+        return new ResponseEntity<>(requestService.searchDatasets(solrQuery, auth), HttpStatus.OK);
     }
 
     @GetMapping("/dataset-info")
