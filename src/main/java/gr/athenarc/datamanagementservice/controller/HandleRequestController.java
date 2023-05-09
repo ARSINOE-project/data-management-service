@@ -9,18 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Min;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Slf4j
+@Validated
 public class HandleRequestController {
 
     @Autowired
@@ -34,39 +34,36 @@ public class HandleRequestController {
     }
 
     @GetMapping("/list-datasets")
-    public ResponseEntity<List<Dataset>> listDatasets(
+    public ResponseEntity<PageResponse<List<Dataset>>> listDatasets(
             @RequestParam(name = "case_study_id", required = false) String caseStudyId,
-            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) int page,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
         return new ResponseEntity<>(requestService.listDatasets(caseStudyId, page, auth), HttpStatus.OK);
     }
 
     @GetMapping("/search-datasets")
-    public ResponseEntity<List<Dataset>> searchDatasets(
+    public ResponseEntity<PageResponse<List<Dataset>>> searchDatasets(
             @RequestParam MultiValueMap<String, String> params,
+            @RequestParam(name = "operator", defaultValue = "and") String operator,
+            @RequestParam(name = "page", defaultValue = "0") @Min(0) int page,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String auth) {
-        MultiValueMap<String, String> paramsCopy = new LinkedMultiValueMap<>(params);
-        Operator operator;
-        if(paramsCopy.containsKey("operator")) {
-            if(paramsCopy.get("operator").size() != 1) {
-                return ResponseEntity.badRequest().build();
-            }
+        // If operator or page were provided, they are captured in their
+        // respective arguments and are not needed in the map
+        // along with the rest of the filter field parameters
+        params.remove("operator");
+        params.remove("page");
 
-            try {
-                operator = Operator.valueOf(paramsCopy.get("operator").get(0));
-                paramsCopy.remove("operator");
-            }
-            catch(IllegalArgumentException e) {
-                return ResponseEntity.badRequest().build();
-            }
+        Operator operatorEnum;
+        try {
+            operatorEnum = Operator.valueOf(operator);
         }
-        else {
-            operator = Operator.and;
+        catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
-        List<SolrQueryTerm> solrQueryTerms = FilterFields.prepareFilterFieldsMap(paramsCopy);
-        String solrQuery = FilterFields.generateSolrQuery(solrQueryTerms, operator);
-        System.out.println(solrQuery);
-        return new ResponseEntity<>(requestService.searchDatasets(solrQuery, auth), HttpStatus.OK);
+
+        List<SolrQueryTerm> solrQueryTerms = FilterFields.prepareFilterFieldsMap(params);
+        String solrQuery = FilterFields.generateSolrQuery(solrQueryTerms, operatorEnum);
+        return new ResponseEntity<>(requestService.searchDatasets(solrQuery, page, auth), HttpStatus.OK);
     }
 
     @GetMapping("/dataset-info")

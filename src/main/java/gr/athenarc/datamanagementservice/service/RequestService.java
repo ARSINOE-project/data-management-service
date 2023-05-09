@@ -125,7 +125,7 @@ public class RequestService {
         return new PageInfo(pageSize, page*pageSize);
     }
 
-    public List<Dataset> listDatasets(String caseStudyId, int page, String auth) {
+    public PageResponse<List<Dataset>> listDatasets(String caseStudyId, int page, String auth) {
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
@@ -164,10 +164,24 @@ public class RequestService {
             throw new CaseStudyNotFoundException(caseStudyId);
         }
 
-        return response.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+        DatasetListCkan dlc = response.getBody().getResult();
+        List<Dataset> results = dlc.getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+
+        Page pageObj = new Page();
+        pageObj.setNumber(page);
+        pageObj.setSize(results.size());
+        pageObj.setTotalElements(dlc.getCount());
+        int totalPages = (int) Math.ceil( (double) dlc.getCount()/pageSize);
+        pageObj.setTotalPages(totalPages);
+
+        PageResponse<List<Dataset>> ret = new PageResponse<>();
+        ret.setResults(results);
+        ret.setPageMetadata(pageObj);
+
+        return ret;
     }
 
-    public List<Dataset> searchDatasets(String solrQuery, String auth) {
+    public PageResponse<List<Dataset>> searchDatasets(String solrQuery, int page, String auth) {
 
         // Headers
         HttpHeaders headers = new HttpHeaders();
@@ -176,6 +190,8 @@ public class RequestService {
         // Build URL
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + searchDatasetsUri)
                 .queryParam("q", "{q}")
+                .queryParam("start", "{start}")
+                .queryParam("rows", "{rows}")
                 .encode()
                 .toUriString();
 
@@ -183,10 +199,28 @@ public class RequestService {
         Map<String, String> params = new HashMap<>();
         params.put("q", solrQuery);
 
-        // API call
-        ResponseEntity<DatasetListResultCkan> r = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
+        PageInfo pageInfo = getPageInfo(page);
+        params.put("start", Integer.toString(pageInfo.start));
+        params.put("rows", Integer.toString(pageInfo.rows));
 
-        return r.getBody().getResult().getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+        // API call
+        ResponseEntity<DatasetListResultCkan> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, new HttpEntity<>(headers), DatasetListResultCkan.class, params);
+
+        DatasetListCkan dlc = response.getBody().getResult();
+        List<Dataset> results = dlc.getResults().stream().map(DTOConverter::convert).collect(Collectors.toList());
+
+        Page pageObj = new Page();
+        pageObj.setNumber(page);
+        pageObj.setSize(results.size());
+        pageObj.setTotalElements(dlc.getCount());
+        int totalPages = (int) Math.ceil( (double) dlc.getCount()/pageSize);
+        pageObj.setTotalPages(totalPages);
+
+        PageResponse<List<Dataset>> ret = new PageResponse<>();
+        ret.setResults(results);
+        ret.setPageMetadata(pageObj);
+
+        return ret;
     }
 
     public Dataset getDatasetInfo(String datasetId, String auth) {
