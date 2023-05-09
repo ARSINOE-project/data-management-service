@@ -65,11 +65,11 @@ List Datasets
 
 .. http:get:: /list-datasets
 
-   Retrieves a list of the datasets in the Data Catalogue.
+   Retrieves a paginated list of the datasets in the Data Catalogue.
 
    :query string case_study_id: The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned. (*optional*)
 
-   :query int page: The page number. While discovering pages starting from zero and upwards, the first page that returns fewer than 100 results or no results is the last / next from last accordingly.
+   :query int page: The page number.
 
    :requestheader Authorization: `API token` (*optional*)
 
@@ -85,42 +85,125 @@ List Datasets
 
 .. sourcecode:: json
 
-   [
-      {
-         "id": "d551d2ff-0902-4576-a610-942e230faaa4",
-         "title": "Natura 2000",
-         "name": "natura-2000",
-         "description": "Natura 2000 datasets",
-         "author": "Eurostat",
-         "maintainer": "Eurostat",
-         "doi": "https://doi.org/10.1007/s10531-021-02125-7",
-         "origin": "primary",
-         "resources": [
-            {
-               "id": "dea64b6b-5bf7-4698-bb88-d095be9c4ccb",
-               "created": "2022-10-25T12:50:48.367494",
-               "description": "natura 2000 greece in shapefile format",
-               "format": "SHP",
-               "name": "natura-2000-greece",
-               "size": 5478508,
-               "url": "{catalogueBaseURL}/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
-               "last_modified": "2022-10-25T12:50:48.330817",
-               "resource_type": null
-            }
-         ],
-         "license_id": "other-at",
-         "license_title": "Other (Attribution)",
-         "license_url": null,
-         "private": true,
-         "case_study_id": "408463d1-b4a2-40a6-bca6-5b69ee3b26a2",
-         "number_of_resources": 1,
-         "publication_date": "2021-09-17",
-         "authorEmail": "",
-         "maintainer_email": "",
-         "resource_type": null,
-         "dataset_type": "geospatial"
-      },
-   ]
+   {
+    "results": [
+        {
+            "id": "6e6e41d9-c7f4-4472-87d7-acc458737a86",
+            "title": "Greece Shapefile",
+            "name": "greece-shapefile",
+            "description": "Greece",
+            "author": "EEA",
+            "maintainer": "",
+            "doi": "",
+            "origin": "secondary",
+            "tags": [],
+            "resources": [
+                {
+                    "id": "333ec029-6299-4f3e-8912-953228026d33",
+                    "created": "2023-05-08T12:52:35.285792",
+                    "description": "",
+                    "format": "SHP",
+                    "name": "Greece_shapefile",
+                    "size": 18352169,
+                    "url": "{catalogueBaseURL}/dataset/6e6e41d9-c7f4-4472-87d7-acc458737a86/resource/333ec029-6299-4f3e-8912-953228026d33/download/greece_shapefile.zip",
+                    "last_modified": "2023-05-08T12:52:35.265641",
+                    "resource_type": null
+                }
+            ],
+            "license_id": "other-open",
+            "license_title": "Other (Open)",
+            "license_url": null,
+            "private": false,
+            "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
+            "number_of_resources": 1,
+            "publication_date": null,
+            "author_email": "",
+            "maintainer_email": "",
+            "resource_type": "observational",
+            "dataset_type": "geospatial"
+        },
+        {
+            "id": "71f3d3fc-d707-4db2-b951-020abc1418ff",
+            "title": "Natura 2000 greece",
+            "name": "natura-2000-greece",
+            "description": "Natura 2000 greece",
+            "author": "Natura",
+            "maintainer": "",
+            "doi": "",
+            "origin": "secondary",
+            "tags": [],
+            "resources": [
+                {
+                    "id": "7b32d161-6d1b-4938-a671-cb3ef302e905",
+                    "created": "2023-05-08T12:49:05.615586",
+                    "description": "Natura 200 shape file",
+                    "format": "SHP",
+                    "name": "Natura 200 shape file",
+                    "size": 20713988,
+                    "url": "{catalogueBaseURL}/dataset/71f3d3fc-d707-4db2-b951-020abc1418ff/resource/7b32d161-6d1b-4938-a671-cb3ef302e905/download/20200813_natura2000_shape-files.rar",
+                    "last_modified": "2023-05-08T12:49:05.584061",
+                    "resource_type": null
+                }
+            ],
+            "license_id": "other-open",
+            "license_title": "Other (Open)",
+            "license_url": null,
+            "private": false,
+            "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
+            "number_of_resources": 1,
+            "publication_date": null,
+            "author_email": "",
+            "maintainer_email": "",
+            "resource_type": "observational",
+            "dataset_type": "geospatial"
+        },
+        {
+            "id": "194e0bf4-db9d-41f3-af90-b7fecacd9d1b",
+            "title": "Natura 2000 network",
+            "name": "natura-2000-network",
+            "description": "Natura 2000 is the key instrument to protect biodiversity in the European Union. It is an ecological network of protected areas, set up to ensure the survival of Europe's most valuable species and habitats. Natura 2000 is based on the 1979 Birds Directive and the 1992 Habitats Directive. This version covers the reporting in 2020.",
+            "author": "Directorate-General for Environment (DG ENV) / European Environment Agency (EEA)",
+            "maintainer": "",
+            "doi": "",
+            "origin": "secondary",
+            "tags": [
+                "tag1",
+                "tag2",
+                "tag3"
+            ],
+            "resources": [
+                {
+                    "id": "0e74b107-b9d7-4a9b-921b-82f83dcb49e0",
+                    "created": "2023-04-21T08:05:38.269019",
+                    "description": "",
+                    "format": "",
+                    "name": "NATURA 2000",
+                    "size": null,
+                    "url": "https://www.eea.europa.eu/data-and-maps/data/natura-14",
+                    "last_modified": null,
+                    "resource_type": null
+                }
+            ],
+            "license_id": "other-open",
+            "license_title": "Other (Open)",
+            "license_url": null,
+            "private": false,
+            "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
+            "number_of_resources": 1,
+            "publication_date": null,
+            "author_email": "",
+            "maintainer_email": "",
+            "resource_type": "observational",
+            "dataset_type": "geospatial"
+        }
+    ],
+    "pageMetadata": {
+        "size": 3,
+        "totalElements": 3,
+        "totalPages": 1,
+        "number": 0
+    }
+}
 
 ===========
 Search Datasets
@@ -128,7 +211,10 @@ Search Datasets
 
 .. http:get:: /search-datasets
 
-   Retrieves a list of the datasets in the Data Catalogue 
+   Retrieves a paginated list of the datasets in the Data Catalogue. The query parameters listed below can be repeated, but when using the "and" operator it only
+   makes sense for tags to be repeated, since a dataset may have multiple tags but not e.g. multiple authors or origins.
+
+   :query int page: The page number.
 
    :query string operator: The operator that joins the filtered fields. Can either be "or" or "and". Defaults to "and". (*optional*)
 
@@ -148,7 +234,7 @@ Search Datasets
 
    :query string title: The title of the dataset (*optional*)
 
-   :query string tags: The tags of the dataset. This field can be provided multiple times. (*optional*)
+   :query string tags: The tags of the dataset. (*optional*)
 
    :requestheader Authorization: `API token` (*optional*)
 
@@ -160,44 +246,7 @@ Search Datasets
 
 **Example Response**
 
-.. sourcecode:: json
-
-   [
-      {
-         "id": "d551d2ff-0902-4576-a610-942e230faaa4",
-         "title": "Natura 2000",
-         "name": "natura-2000",
-         "description": "Natura 2000 datasets",
-         "author": "Eurostat",
-         "maintainer": "Eurostat",
-         "doi": "https://doi.org/10.1007/s10531-021-02125-7",
-         "origin": "primary",
-         "resources": [
-            {
-               "id": "dea64b6b-5bf7-4698-bb88-d095be9c4ccb",
-               "created": "2022-10-25T12:50:48.367494",
-               "description": "natura 2000 greece in shapefile format",
-               "format": "SHP",
-               "name": "natura-2000-greece",
-               "size": 5478508,
-               "url": "{catalogueBaseURL}/dataset/d551d2ff-0902-4576-a610-942e230faaa4/resource/dea64b6b-5bf7-4698-bb88-d095be9c4ccb/download/262a95fb-2d88-4df8-980f-5ed4de44245b.zip",
-               "last_modified": "2022-10-25T12:50:48.330817",
-               "resource_type": null
-            }
-         ],
-         "license_id": "other-at",
-         "license_title": "Other (Attribution)",
-         "license_url": null,
-         "private": true,
-         "case_study_id": "408463d1-b4a2-40a6-bca6-5b69ee3b26a2",
-         "number_of_resources": 1,
-         "publication_date": "2021-09-17",
-         "authorEmail": "",
-         "maintainer_email": "",
-         "resource_type": null,
-         "dataset_type": "geospatial"
-      },
-   ]
+Same as in `List Datasets`_.
 
 ===========
 Retrieve Dataset Info
