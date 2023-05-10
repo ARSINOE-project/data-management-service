@@ -67,6 +67,9 @@ public class DatasetCkan {
     @JsonProperty("private")
     private Boolean isPrivate;
 
+    @JsonProperty("visibility_arsinoe")
+    private String visibilityArsinoe;
+
     @JsonProperty("publication_date")
     private String publicationDate;
 

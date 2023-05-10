@@ -25,8 +25,7 @@ public class Dataset {
     @JsonProperty("license_url")
     private String licenseUrl;
 
-    @JsonProperty("private")
-    private boolean isPrivate;
+    private String visibility;
 
     @JsonProperty("case_study_id")
     private String caseStudyId;

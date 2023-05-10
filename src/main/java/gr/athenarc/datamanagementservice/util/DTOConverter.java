@@ -3,6 +3,7 @@ package gr.athenarc.datamanagementservice.util;
 import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class DTOConverter {
@@ -34,7 +35,7 @@ public class DTOConverter {
         d.setLicenseId(dc.getLicenseId());
         d.setLicenseTitle(dc.getLicenseTitle());
         d.setLicenseUrl(dc.getLicenseUrl());
-        d.setPrivate(dc.getIsPrivate());
+        d.setVisibility(dc.getVisibilityArsinoe());
         d.setCaseStudyId(dc.getOwnerOrg());
         d.setNumResources(dc.getNumResources());
         d.setPublicationDate(dc.getPublicationDate());
@@ -45,12 +46,15 @@ public class DTOConverter {
         d.setDoi(dc.getDoi());
         d.setOrigin(dc.getOrigin());
         d.setDatasetType(dc.getDatasetType());
-        d.setResources(dc.getResources().stream().map(DTOConverter::convert).collect(Collectors.toList()));
+        d.setResources(dc.getResources().stream().map(DTOConverter::convert).filter(Objects::nonNull).collect(Collectors.toList()));
         d.setTags(dc.getTags().stream().map(TagCkan::getName).collect(Collectors.toList()));
         return d;
     }
 
     public static Resource convert(ResourceCkan rc) {
+
+        if(rc.getNotFound() != null && rc.getNotFound())
+            return null;
 
         Resource r = new Resource();
         r.setId(rc.getId());

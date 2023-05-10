@@ -5,12 +5,10 @@ import gr.athenarc.datamanagementservice.dto.*;
 import gr.athenarc.datamanagementservice.dto.ckan.*;
 import gr.athenarc.datamanagementservice.exception.*;
 import gr.athenarc.datamanagementservice.util.DTOConverter;
-import gr.athenarc.datamanagementservice.util.FilterFields;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -190,6 +188,7 @@ public class RequestService {
         // Build URL
         String urlTemplate = UriComponentsBuilder.fromHttpUrl(baseUri + searchDatasetsUri)
                 .queryParam("q", "{q}")
+                .queryParam("include_private", "{include_private}")
                 .queryParam("start", "{start}")
                 .queryParam("rows", "{rows}")
                 .encode()
@@ -198,6 +197,7 @@ public class RequestService {
         // Create params map
         Map<String, String> params = new HashMap<>();
         params.put("q", solrQuery);
+        params.put("include_private", "true");
 
         PageInfo pageInfo = getPageInfo(page);
         params.put("start", Integer.toString(pageInfo.start));
@@ -501,7 +501,7 @@ public class RequestService {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         // Body
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<String, Object>();
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         if(fileBytes != null) {
             // This nested HttpEntity is important to create the correct
             // Content-Disposition entry with metadata "name" and "filename"

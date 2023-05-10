@@ -65,7 +65,7 @@ List Datasets
 
 .. http:get:: /list-datasets
 
-   Retrieves a paginated list of the datasets in the Data Catalogue.
+   Retrieves a paginated list of the datasets in the Data Catalogue. In the case of a protected resource on which the user does not have full view rights, the resources array will be empty, but the number_of_resources field will hold the correct number of resources.
 
    :query string case_study_id: The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned. (*optional*)
 
@@ -86,8 +86,8 @@ List Datasets
 .. sourcecode:: json
 
    {
-    "results": [
-        {
+      "results": [
+         {
             "id": "6e6e41d9-c7f4-4472-87d7-acc458737a86",
             "title": "Greece Shapefile",
             "name": "greece-shapefile",
@@ -98,22 +98,22 @@ List Datasets
             "origin": "secondary",
             "tags": [],
             "resources": [
-                {
-                    "id": "333ec029-6299-4f3e-8912-953228026d33",
-                    "created": "2023-05-08T12:52:35.285792",
-                    "description": "",
-                    "format": "SHP",
-                    "name": "Greece_shapefile",
-                    "size": 18352169,
-                    "url": "{catalogueBaseURL}/dataset/6e6e41d9-c7f4-4472-87d7-acc458737a86/resource/333ec029-6299-4f3e-8912-953228026d33/download/greece_shapefile.zip",
-                    "last_modified": "2023-05-08T12:52:35.265641",
-                    "resource_type": null
-                }
+                  {
+                     "id": "333ec029-6299-4f3e-8912-953228026d33",
+                     "created": "2023-05-08T12:52:35.285792",
+                     "description": "",
+                     "format": "SHP",
+                     "name": "Greece_shapefile",
+                     "size": 18352169,
+                     "url": "{catalogueBaseURL}/dataset/6e6e41d9-c7f4-4472-87d7-acc458737a86/resource/333ec029-6299-4f3e-8912-953228026d33/download/greece_shapefile.zip",
+                     "last_modified": "2023-05-08T12:52:35.265641",
+                     "resource_type": null
+                  }
             ],
             "license_id": "other-open",
             "license_title": "Other (Open)",
             "license_url": null,
-            "private": false,
+            "visibility": "public",
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -121,8 +121,8 @@ List Datasets
             "maintainer_email": "",
             "resource_type": "observational",
             "dataset_type": "geospatial"
-        },
-        {
+         },
+         {
             "id": "71f3d3fc-d707-4db2-b951-020abc1418ff",
             "title": "Natura 2000 greece",
             "name": "natura-2000-greece",
@@ -133,22 +133,22 @@ List Datasets
             "origin": "secondary",
             "tags": [],
             "resources": [
-                {
-                    "id": "7b32d161-6d1b-4938-a671-cb3ef302e905",
-                    "created": "2023-05-08T12:49:05.615586",
-                    "description": "Natura 200 shape file",
-                    "format": "SHP",
-                    "name": "Natura 200 shape file",
-                    "size": 20713988,
-                    "url": "{catalogueBaseURL}/dataset/71f3d3fc-d707-4db2-b951-020abc1418ff/resource/7b32d161-6d1b-4938-a671-cb3ef302e905/download/20200813_natura2000_shape-files.rar",
-                    "last_modified": "2023-05-08T12:49:05.584061",
-                    "resource_type": null
-                }
+                  {
+                     "id": "7b32d161-6d1b-4938-a671-cb3ef302e905",
+                     "created": "2023-05-08T12:49:05.615586",
+                     "description": "Natura 200 shape file",
+                     "format": "SHP",
+                     "name": "Natura 200 shape file",
+                     "size": 20713988,
+                     "url": "{catalogueBaseURL}/dataset/71f3d3fc-d707-4db2-b951-020abc1418ff/resource/7b32d161-6d1b-4938-a671-cb3ef302e905/download/20200813_natura2000_shape-files.rar",
+                     "last_modified": "2023-05-08T12:49:05.584061",
+                     "resource_type": null
+                  }
             ],
             "license_id": "other-open",
             "license_title": "Other (Open)",
             "license_url": null,
-            "private": false,
+            "visibility" "public",
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -156,8 +156,8 @@ List Datasets
             "maintainer_email": "",
             "resource_type": "observational",
             "dataset_type": "geospatial"
-        },
-        {
+         },
+         {
             "id": "194e0bf4-db9d-41f3-af90-b7fecacd9d1b",
             "title": "Natura 2000 network",
             "name": "natura-2000-network",
@@ -167,27 +167,27 @@ List Datasets
             "doi": "",
             "origin": "secondary",
             "tags": [
-                "tag1",
-                "tag2",
-                "tag3"
+                  "tag1",
+                  "tag2",
+                  "tag3"
             ],
             "resources": [
-                {
-                    "id": "0e74b107-b9d7-4a9b-921b-82f83dcb49e0",
-                    "created": "2023-04-21T08:05:38.269019",
-                    "description": "",
-                    "format": "",
-                    "name": "NATURA 2000",
-                    "size": null,
-                    "url": "https://www.eea.europa.eu/data-and-maps/data/natura-14",
-                    "last_modified": null,
-                    "resource_type": null
-                }
+                  {
+                     "id": "0e74b107-b9d7-4a9b-921b-82f83dcb49e0",
+                     "created": "2023-04-21T08:05:38.269019",
+                     "description": "",
+                     "format": "",
+                     "name": "NATURA 2000",
+                     "size": null,
+                     "url": "https://www.eea.europa.eu/data-and-maps/data/natura-14",
+                     "last_modified": null,
+                     "resource_type": null
+                  }
             ],
             "license_id": "other-open",
             "license_title": "Other (Open)",
             "license_url": null,
-            "private": false,
+            "visibility": "public",
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -195,15 +195,15 @@ List Datasets
             "maintainer_email": "",
             "resource_type": "observational",
             "dataset_type": "geospatial"
-        }
-    ],
-    "pageMetadata": {
-        "size": 3,
-        "totalElements": 3,
-        "totalPages": 1,
-        "number": 0
-    }
-}
+         }
+      ],
+      "pageMetadata": {
+         "size": 3,
+         "totalElements": 3,
+         "totalPages": 1,
+         "number": 0
+      }
+   }
 
 ===========
 Search Datasets
