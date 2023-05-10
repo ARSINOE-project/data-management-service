@@ -54,7 +54,4 @@ public class ResourceCkan {
 
     @JsonProperty("url_type")
     private String urlType;
-
-    @JsonProperty("not_found")
-    private Boolean notFound;
 }

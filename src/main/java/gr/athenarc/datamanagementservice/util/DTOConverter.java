@@ -46,15 +46,12 @@ public class DTOConverter {
         d.setDoi(dc.getDoi());
         d.setOrigin(dc.getOrigin());
         d.setDatasetType(dc.getDatasetType());
-        d.setResources(dc.getResources().stream().map(DTOConverter::convert).filter(Objects::nonNull).collect(Collectors.toList()));
+        d.setResources(dc.getResources().stream().map(DTOConverter::convert).collect(Collectors.toList()));
         d.setTags(dc.getTags().stream().map(TagCkan::getName).collect(Collectors.toList()));
         return d;
     }
 
     public static Resource convert(ResourceCkan rc) {
-
-        if(rc.getNotFound() != null && rc.getNotFound())
-            return null;
 
         Resource r = new Resource();
         r.setId(rc.getId());
@@ -95,7 +92,7 @@ public class DTOConverter {
         ndc.setDatasetType(nd.getDatasetType());
         ndc.setOrigin(nd.getOrigin());
         ndc.setResourceType(nd.getResourceType());
-        ndc.setPrivate(nd.isPrivate());
+        ndc.setVisibilityArsinoe(nd.getVisibility());
         ndc.setTitle(nd.getTitle());
         ndc.setName(nd.getName());
         ndc.setLicenseId(nd.getLicenseId());

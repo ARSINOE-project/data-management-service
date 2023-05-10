@@ -23,6 +23,7 @@ public class FilterFields {
         put("case_study_name", "organization");
         put("title", "title");
         put("tags", "tags");
+        put("resource_format", "res_format");
     }};
 
     public static List<SolrQueryTerm> prepareFilterFieldsMap(MultiValueMap<String, String> receivedFilterFields) {

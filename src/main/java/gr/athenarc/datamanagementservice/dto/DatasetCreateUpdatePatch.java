@@ -52,6 +52,5 @@ public class DatasetCreateUpdatePatch {
     @JsonProperty("case_study_id")
     private String caseStudy;
 
-    @JsonProperty("private")
-    private boolean isPrivate;
+    private String visibility;
 }

@@ -65,7 +65,7 @@ List Datasets
 
 .. http:get:: /list-datasets
 
-   Retrieves a paginated list of the datasets in the Data Catalogue. In the case of a protected resource on which the user does not have full view rights, the resources array will be empty, but the number_of_resources field will hold the correct number of resources.
+   Retrieves a paginated list of the datasets in the Data Catalogue. In the case of a protected dataset on which the user does not have full view rights, the resources only include the name field.
 
    :query string case_study_id: The id of the case study. Specifies the case study to which the datasets belong. If not provided, then all datasets in the catalogue are returned. (*optional*)
 

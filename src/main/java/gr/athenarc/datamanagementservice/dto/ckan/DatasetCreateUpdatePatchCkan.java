@@ -47,6 +47,6 @@ public class DatasetCreateUpdatePatchCkan {
     @JsonProperty("owner_org")
     private String caseStudy;
 
-    @JsonProperty("private")
-    private boolean isPrivate;
+    @JsonProperty("visibility_arsinoe")
+    private String visibilityArsinoe;
 }
