@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 public class FilterFields {
 
-    private static Map<String, String> filterFields = new HashMap<String, String>() {{
+    private final static Map<String, String> filterFields = new HashMap<>() {{
+        put("visibility", "extras_visibility_arsinoe");
         put("author", "author");
         put("dataset_type", "extras_dataset_type_arsinoe");
         put("origin", "extras_origin");
@@ -36,7 +37,7 @@ public class FilterFields {
             }
 
             for(String s: entry.getValue()) {
-                ret.add(new SolrQueryTerm(entry.getKey(), s));
+                ret.add(new SolrQueryTerm(filterFields.get(entry.getKey()), s));
             }
         }
 
