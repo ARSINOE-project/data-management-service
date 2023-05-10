@@ -236,6 +236,8 @@ Search Datasets
 
    :query string tags: The tags of the dataset. (*optional*)
 
+   :query string resource_format: The file format of resources within the dataset.
+
    :requestheader Authorization: `API token` (*optional*)
 
 **Example Request**
