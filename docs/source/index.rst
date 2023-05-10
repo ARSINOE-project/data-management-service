@@ -236,7 +236,7 @@ Search Datasets
 
    :query string tags: The tags of the dataset. (*optional*)
 
-   :query string resource_format: The file format of resources within the dataset.
+   :query string resource_format: The file format of resources within the dataset. (*optional*)
 
    :requestheader Authorization: `API token` (*optional*)
 
@@ -710,18 +710,18 @@ Create Dataset
    :requestheader Authorization: `API token`
    :<json string title: The title of the dataset.
    :<json string name: The name of the dataset (This will be used to create the url of the dataset within the catalogue. Use all lowercase letters and hyphens instead of spaces)
-   :<json string description: The description of the dataset. (optional)
-   :<json string license_id: The id of the license. See /list-licenses for available values. (optional)
-   :<json string publication_date: The publication date of the dataset. (optional)
+   :<json string description: The description of the dataset. (*optional*)
+   :<json string license_id: The id of the license. See /list-licenses for available values. (*optional*)
+   :<json string publication_date: The publication date of the dataset. (*optional*)
    :<json string author: The name of the dataset's author.
-   :<json string author_email: The author's email. (optional)
-   :<json string maintainer: The name of the dataset's maintainer. (optional)
-   :<json string maintainer_email: The email of the dataset's maintainer. (optional)
-   :<json string doi: The DOI of the dataset. (optional)
+   :<json string author_email: The author's email. (*optional*)
+   :<json string maintainer: The name of the dataset's maintainer. (*optional*)
+   :<json string maintainer_email: The email of the dataset's maintainer. (*optional*)
+   :<json string doi: The DOI of the dataset. (*optional*)
    :<json string origin: The origin of the dataset. Can be one of: unknown, primary, secondary
    :<json string resource_type: The resource type of the dataset. Can be one of: model, software, sensor, observational, report, images, formulas, statistical
    :<json string dataset_type: The type of the dataset. Can be one of: textual, geospatial, satellite_images, tabular, video, scripts
-   :<json string array tags: The tags of the dataset. An array of strings. (optional)
+   :<json string array tags: The tags of the dataset. An array of strings. (*optional*)
    :<json string case_stuy_id: The id of the owner case study.
    :<json boolean private: Whether or not this is going to be a private dataset. (optional, defaults to false) 
 
@@ -807,12 +807,12 @@ Create Resource
    Creates a new dataset in the Data Catalogue. (A dataset is a collection of resources)
    
    :requestheader Authorization: `API token`
-   :formparam file: The resource file. (optional)
+   :formparam file: The resource file. (*optional*)
    :formparam resource: A json string containing the rest of the fields listed below:
    :<json string dataset_id: The id of the owning dataset. (Inside resource json)
-   :<json string url: The url to an external resource. This must be provided only if a file upload is not provided. (optional) (Inside resource json)
-   :<json string description: The description of the resource. (optional) (Inside resource json)
-   :<json string format: The format of the resource, e.g. csv, shp, html etc (optional) (Inside resource json)
+   :<json string url: The url to an external resource. This must be provided only if a file upload is not provided. (*optional*) (Inside resource json)
+   :<json string description: The description of the resource. (*optional*) (Inside resource json)
+   :<json string format: The format of the resource, e.g. csv, shp, html etc (*optional*) (Inside resource json)
    :<json string name: The name of the resource. (Inside resource json)
      
 
