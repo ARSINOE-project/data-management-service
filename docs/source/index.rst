@@ -723,7 +723,7 @@ Create Dataset
    :<json string dataset_type: The type of the dataset. Can be one of: textual, geospatial, satellite_images, tabular, video, scripts
    :<json string array tags: The tags of the dataset. An array of strings. (*optional*)
    :<json string case_stuy_id: The id of the owner case study.
-   :<json boolean private: Whether or not this is going to be a private dataset. (optional, defaults to false) 
+   :<json string visibility: The visiblity of the dataset. Can be public, private or protected. (required) 
 
 
 **Example Request**
