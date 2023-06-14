@@ -747,7 +747,8 @@ Create Dataset
       "case_study_id": "uuid-of-case-study",
       "resource_type": "software",
       "tags": ["tag1", "tag2", "tag3"],
-      "publication_date": "2023/02/28"
+      "publication_date": "2023/02/28",
+      "visibility": "protected"
    }
 
 **Response**
