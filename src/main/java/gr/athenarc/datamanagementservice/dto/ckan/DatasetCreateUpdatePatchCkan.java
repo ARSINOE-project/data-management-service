@@ -49,4 +49,7 @@ public class DatasetCreateUpdatePatchCkan {
 
     @JsonProperty("visibility_arsinoe")
     private String visibilityArsinoe;
+
+    @JsonProperty("zenodo_publish")
+    private Boolean zenodoPublish;
 }

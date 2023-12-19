@@ -53,4 +53,7 @@ public class DatasetCreateUpdatePatch {
     private String caseStudy;
 
     private String visibility;
+
+    @JsonProperty("zenodo_publish")
+    private Boolean zenodoPublish;
 }

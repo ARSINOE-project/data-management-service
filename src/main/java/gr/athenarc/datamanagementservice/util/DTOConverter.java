@@ -36,6 +36,7 @@ public class DTOConverter {
         d.setLicenseTitle(dc.getLicenseTitle());
         d.setLicenseUrl(dc.getLicenseUrl());
         d.setVisibility(dc.getVisibilityArsinoe());
+        d.setZenodoPublish(dc.getZenodoPublish());
         d.setCaseStudyId(dc.getOwnerOrg());
         d.setNumResources(dc.getNumResources());
         d.setPublicationDate(dc.getPublicationDate());
@@ -93,6 +94,7 @@ public class DTOConverter {
         ndc.setOrigin(nd.getOrigin());
         ndc.setResourceType(nd.getResourceType());
         ndc.setVisibilityArsinoe(nd.getVisibility());
+        ndc.setZenodoPublish(nd.getZenodoPublish());
         ndc.setTitle(nd.getTitle());
         ndc.setName(nd.getName());
         ndc.setLicenseId(nd.getLicenseId());

@@ -27,6 +27,9 @@ public class Dataset {
 
     private String visibility;
 
+    @JsonProperty("zenodo_publish")
+    private Boolean zenodoPublish;
+
     @JsonProperty("case_study_id")
     private String caseStudyId;
 
