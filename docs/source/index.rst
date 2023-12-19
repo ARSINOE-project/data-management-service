@@ -114,6 +114,7 @@ List Datasets
             "license_title": "Other (Open)",
             "license_url": null,
             "visibility": "public",
+            "zenodo_publish": false,
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -149,6 +150,7 @@ List Datasets
             "license_title": "Other (Open)",
             "license_url": null,
             "visibility" "public",
+            "zenodo_publish": true,
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -188,6 +190,7 @@ List Datasets
             "license_title": "Other (Open)",
             "license_url": null,
             "visibility": "public",
+            "zenodo_publish": null,
             "case_study_id": "b022e32a-7212-4685-a923-a22b6787f20b",
             "number_of_resources": 1,
             "publication_date": null,
@@ -450,7 +453,8 @@ List Datasets per Group
          "license_id": "gfdl",
          "license_title": "GNU Free Documentation License",
          "license_url": "http://www.opendefinition.org/licenses/gfdl",
-         "private": false,
+         "visibility": "public",
+         "zenodo_publish": null,
          "case_study_id": "408463d1-b4a2-40a6-bca6-5b69ee3b26a2",
          "number_of_resources": 1,
          "publication_date": "2022-10-22",
@@ -506,7 +510,8 @@ List Datasets per Group
          "license_id": "cc-nc",
          "license_title": "Creative Commons Non-Commercial (Any)",
          "license_url": "http://creativecommons.org/licenses/by-nc/2.0/",
-         "private": true,
+         "visibility": "public",
+         "zenodo_publish": null,
          "case_study_id": "e5ad6b2d-3c93-4f1f-a143-6a18a4dc0955",
          "number_of_resources": 3,
          "publication_date": null,
@@ -748,7 +753,8 @@ Create Dataset
       "resource_type": "software",
       "tags": ["tag1", "tag2", "tag3"],
       "publication_date": "2023/02/28",
-      "visibility": "protected"
+      "visibility": "protected",
+      "zenodo_publish": true
    }
 
 **Response**
